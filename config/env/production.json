@@ -1,7 +1,7 @@
 {
-    "db": "mongodb://localhost/mean",
+    //"db": "mongodb://localhost/mean",
     "app": {
-        "name": "teleMenu - menús cerca de ti - Production"
+        "name": "teleMenu - menús cerca de ti"
     },
     "facebook": {
         "clientID": "APP_ID",
