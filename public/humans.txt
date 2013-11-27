@@ -1,0 +1,19 @@
+# humanstxt.org/
+# The humans responsible & technology colophon
+
+# TEAM
+
+    Ruben Anton Martinez -- Fullstack Web Developer -- @rubocoptero
+
+# THANKS
+
+    <name>
+
+# TECHNOLOGY COLOPHON
+
+    HTML5, CSS3
+    jQuery, Modernizr
+    Bootstrap
+    AngularJS
+    Node.js
+    MongoDB

@@ -1,0 +1,33 @@
+<section data-ng-controller="MenusController">
+    <h3>Menú:</h3>
+    <div class="panel panel-default">
+        <div class="panel-heading">Head</div>
+        <div class="panel-body">
+            <ul class="list-group">
+                <li class="list-group-item">1</li>
+                <li class="list-group-item">2</li>
+                <li class="list-group-item">3</li>
+                <li class="list-group-item">4</li>
+            </ul>
+        </div>
+        <div class="panel-heading">Head</div>
+        <div class="panel-body">
+            <ul class="list-group">
+                <li class="list-group-item">
+                    <form role="form" id="food-form" ng-submit="addFood()">
+                        <div class="form-group">
+                            <input type="text" id="new-food" ng-model="newFood" autofocus placeholder="Nuevo plato..." class="form-control">
+                </div>
+            </form>
+                </li>
+            </ul>
+        </div>
+        <div class="panel-heading">
+            <form role="form" id="section-form" ng-submit="addSection()">
+                <div class="form-group">
+                    <input type="text" id="new-section" ng-model="newSection" autofocus placeholder="Nueva sección..." class="form-control">
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
