@@ -1,5 +1,4 @@
 {
-    //"db": "mongodb://localhost/mean",
     "app": {
         "name": "teleMenu - menús cerca de ti"
     },
