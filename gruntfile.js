@@ -5,32 +5,36 @@ module.exports = function(grunt) {
     // Project Configuration
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-        yeoman: {
-            public: 'public',
-            dist: 'dist'
+        paths: {
+            front: 'public',
+            back: 'app',
+            dist: 'dist',
+            test: 'test',
+            testFront: 'test/public',
+            testBack: 'test/app'
         },
         watch: {
             jade: {
-                files: ['app/views/**'],
+                files: ['<%= paths.back %>/views/**'],
                 options: {
                     livereload: true,
                 },
             },
             js: {
-                files: ['public/js/**', 'app/**/*.js'],
+                files: ['<%= paths.front %>/js/**', '<%= paths.back %>/**/*.js'],
                 tasks: ['jshint'],
                 options: {
                     livereload: true,
                 },
             },
             html: {
-                files: ['public/views/**'],
+                files: ['<%= paths.front %>/views/**'],
                 options: {
                     livereload: true,
                 },
             },
             compass: {
-                files: ['public/styles/sass/**/*.{scss, sass}'],
+                files: ['<%= paths.front %>/styles/sass/**/*.{scss, sass}'],
                 tasks: ['compass:server'],
                 options: {
                     livereload: true
@@ -38,7 +42,12 @@ module.exports = function(grunt) {
             }
         },
         jshint: {
-            all: ['gruntfile.js', 'public/js/**/*.js', 'test/**/*.js', 'app/**/*.js']
+            all: [
+                'gruntfile.js',
+                '<%= paths.front %>/js/**/*.js',
+                '<%= paths.test %>/**/*.js',
+                '<%= paths.back %>/**/*.js'
+            ]
         },
         nodemon: {
             dev: {
@@ -47,7 +56,7 @@ module.exports = function(grunt) {
                     args: [],
                     ignoredFiles: ['README.md', 'node_modules/**', '.DS_Store'],
                     watchedExtensions: ['js'],
-                    watchedFolders: ['app', 'config'],
+                    watchedFolders: ['<%= paths.back %>', 'config'],
                     debug: true,
                     delayTime: 1,
                     env: {
@@ -63,11 +72,40 @@ module.exports = function(grunt) {
                 logConcurrentOutput: true
             }
         },
+        karma: {
+            unit: {
+                configFile: '<%= paths.testFront %>/karma-unit.conf.js',
+                autoWatch: false,
+                singleRun: true
+            },
+            unit_auto: {
+                configFile: '<%= paths.testFront %>/karma-unit.conf.js'
+            },
+            midway: {
+                configFile: '<%= paths.testFront %>/karma-midway.conf.js',
+                autoWatch: false,
+                singleRun: true
+            },
+            midway_auto: {
+                configFile: '<%= paths.testFront %>/karma-midway.conf.js'
+            },
+            e2e: {
+                configFile: '<%= paths.testFront %>/karma-e2e.conf.js',
+                autoWatch: false,
+                singleRun: true
+            },
+            e2e_auto: {
+                configFile: '<%= paths.testFront %>/karma-e2e.conf.js'
+            }
+        },
         mochaTest: {
             options: {
-                reporter: 'spec'
+                reporter: 'spec',
+                require: [
+                    '<%= paths.testBack %>/common.js'
+                ]
             },
-            src: ['test/**/*.js']
+            src: ['<%= paths.testBack %>/**/*.js']
         },
         env: {
             test: {
@@ -76,9 +114,9 @@ module.exports = function(grunt) {
         },
         compass: {
             options: {
-                sassDir: '<%= yeoman.public %>/styles/sass',
-                cssDir: '<%= yeoman.public %>/styles/css',
-                importPath: '<%= yeoman.public %>/lib'
+                sassDir: '<%= paths.front %>/styles/sass',
+                cssDir: '<%= paths.front %>/styles/css',
+                importPath: '<%= paths.front %>/lib'
             },
             server: {
                 options: {
@@ -88,7 +126,7 @@ module.exports = function(grunt) {
         }
     });
 
-    //Load NPM tasks 
+    //Load NPM tasks
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-mocha-test');
@@ -105,4 +143,12 @@ module.exports = function(grunt) {
 
     //Test task.
     grunt.registerTask('test', ['env:test', 'mochaTest']);
+    grunt.registerTask('test:back', ['env:test', 'mochaTest']);
+
+
+    // Maybe use connect as server when test frontend
+    // grunt.registerTask('test:front', ['connect:testserver','karma:unit','karma:midway', 'karma:e2e']);
+    // grunt.registerTask('test:unit', ['karma:unit']);
+    // grunt.registerTask('test:midway', ['connect:testserver','karma:midway']);
+    // grunt.registerTask('test:e2e', ['connect:testserver', 'karma:e2e']);
 };

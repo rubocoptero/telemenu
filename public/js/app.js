@@ -1,6 +1,7 @@
 window.app = angular.module('telemenu', [
     'ngCookies',
     'ngResource',
+    'ngRoute',
     'ui.bootstrap',
     'ui.route',
     'telemenu.system',
