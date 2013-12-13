@@ -9,6 +9,7 @@
     "angular-mocks": "~1.2.3",
     "angular-ui-utils": "~0.0.4",
     "angular-route": "~1.2.3",
-    "angularjs-scope.safeapply": "*"
+    "angularjs-scope.safeapply": "*",
+    "angular-bootstrap": "~0.7.0"
   }
 }
