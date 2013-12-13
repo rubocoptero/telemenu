@@ -10,7 +10,7 @@ var user, user2;
 //The tests
 describe('<Unit Test>', function() {
     describe('Model User:', function() {
-        before(function(done) {
+        before(function() {
             user = new User({
                 name: 'Full name',
                 email: 'test@test.com',
@@ -23,8 +23,6 @@ describe('<Unit Test>', function() {
                 username: 'user',
                 password: 'password'
             });
-
-            done();
         });
 
         describe('Method Save', function() {
@@ -35,7 +33,7 @@ describe('<Unit Test>', function() {
                 });
             });
 
-            it('should be able to save whithout problems', function(done) {
+            it('should be able to save without problems', function(done) {
                 user.save(done);
             });
 
@@ -57,8 +55,7 @@ describe('<Unit Test>', function() {
         });
 
         after(function(done) {
-            User.remove().exec();
-            done();
+            User.remove().exec(done);
         });
     });
 });

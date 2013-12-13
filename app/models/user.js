@@ -21,6 +21,10 @@ var userSchema = new Schema({
     twitter: {},
     github: {},
     google: {},
+    verified: {
+        type: Boolean,
+        default: false
+    },
     feedback: {type: Schema.ObjectId, ref: 'Feedback'}
 });
 

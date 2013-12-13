@@ -12,7 +12,8 @@ var getMailTransport = function() {
                     user: process.env.EMAIL_USER || 'rubendetelemenu@gmail.com',
                     pass: process.env.EMAIL_PASS || 'password'
                 },
-                debug: ((process.env.NODE_ENV !== 'production') ? true : false)
+                debug: process.env.DEBUG_MAILER ||
+                    ((process.env.NODE_ENV !== 'production') ? true : false)
             }
         );
     }

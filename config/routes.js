@@ -16,6 +16,8 @@ module.exports = function(app, passport, auth) {
     app.get('/users/me', users.me);
     app.get('/users/:userId', users.show);
 
+    app.get('/verificacion/:token', users.verification);
+
     //Setting the facebook oauth routes
     app.get('/auth/facebook', passport.authenticate('facebook', {
         scope: ['email', 'user_about_me'],
@@ -59,6 +61,7 @@ module.exports = function(app, passport, auth) {
 
     //Finish with setting up the userId param
     app.param('userId', users.user);
+    app.param('token', users.verify);
 
     //Article Routes
     var articles = require('../app/controllers/articles');

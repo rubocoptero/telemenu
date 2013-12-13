@@ -3,6 +3,7 @@
  */
 var mongoose = require('mongoose'),
     User = mongoose.model('User'),
+    VerificationToken = mongoose.model('VerificationToken'),
     mailer = require('./mailer');
 
 /**
@@ -52,6 +53,7 @@ exports.session = function(req, res) {
  */
 exports.create = function(req, res) {
     var user = new User(req.body);
+    var verificationToken;
 
     user.provider = 'local';
     user.save(function(err) {
@@ -61,9 +63,24 @@ exports.create = function(req, res) {
                 user: user
             });
         }
-        req.logIn(user, function(err) {
+        verificationToken = new VerificationToken({user: user._id});
+        verificationToken.save(function(err, savedToken) {
             if (err) return next(err);
-            return res.redirect('/');
+            mailer.sendVerificationLink(
+                user.email,
+                'https://telemenu.herokuapp.com/verificacion/' + savedToken.token,
+                function(err) {
+                    if (err) return next(err);
+                    console.log('Mail sent successfully');
+                    req.logIn(user, function(err) {
+                        if (err) return next(err);
+                        req.flash(
+                            'success',
+                            'Te hemos enviado un correo electrónico con el último paso para completar tu registro.'
+                        );
+                        return res.redirect('/');
+                    });
+                });
         });
     });
 };
@@ -101,4 +118,29 @@ exports.user = function(req, res, next, id) {
             req.profile = user;
             next();
         });
+};
+
+exports.verification = function(req, res) {
+    res.redirect('/');
+    // res.jsonp(req.verified || null);
+};
+
+exports.verify = function(req, res, next, token) {
+    VerificationToken.getUserByToken(token, function(err, resultUser) {
+        if (err) return next(err);
+        if (!resultUser) {
+            req.flash(
+                'errors',
+                'La verificación ha fallado. Es posible que su código de verificación haya caducado.'
+            );
+            return next();
+        }
+        resultUser.verified = true;
+        resultUser.save(function(err, savedUser) {
+            if (err) return next(err);
+            req.verified = savedUser.verified;
+            req.flash('success', 'Felicidades! Su registro se ha completado con éxito. Ya es uno más de nuestros usuarios.');
+            next();
+        });
+    });
 };
