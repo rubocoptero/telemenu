@@ -38,6 +38,7 @@
     "grunt": "latest",
     "grunt-cli": "latest",
     "grunt-env": "latest",
+    "nodemailer": "~0.5.13",
     "node-uuid": "~1.4.1"
   },
   "devDependencies": {
@@ -67,7 +68,6 @@
     "karma-phantomjs-launcher": "~0.1.1",
     "karma-coffee-preprocessor": "~0.1.1",
     "karma": "~0.10.7",
-    "nodemailer": "~0.5.13",
     "sinon": "~1.7.3",
     "sinon-chai": "~2.4.0"
   }
