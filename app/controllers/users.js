@@ -70,14 +70,18 @@ exports.create = function(req, res) {
                 user.email,
                 'https://telemenu.herokuapp.com/verificacion/' + savedToken.token,
                 function(err) {
-                    if (err) return next(err);
+                    if (err) return console.log(err);
                     console.log('Mail sent successfully');
                     req.logIn(user, function(err) {
-                        if (err) return next(err);
-                        req.flash(
-                            'success',
-                            'Te hemos enviado un correo electrónico con el último paso para completar tu registro.'
-                        );
+                        if (err) {
+                            return next(err);
+                        } else {
+                            req.flash(
+                                'success',
+                                'Te hemos enviado un correo electrónico con el último paso para completar tu registro.'
+                            );
+                        }
+
                         return res.redirect('/');
                     });
                 });

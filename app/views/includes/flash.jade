@@ -1,20 +1,22 @@
-each msg in locals.info
-  div.alert.alert-info.alert-dismissable.fade.in
-    button.close(type='button', data-dismiss='alert', aria-hidden='true') &times;
-    = msg
+if locals.info
+  each msg in locals.info
+    div.alert.alert-info.alert-dismissable.fade.in
+      button.close(type='button', data-dismiss='alert', aria-hidden='true') &times;
+      = msg
 
+if locals.success
+  each msg in locals.success
+    div.alert.alert-success.alert-dismissable.fade.in
+      button.close(type='button', data-dismiss='alert', aria-hidden='true') &times;
+      = msg
 
-each msg in locals.success
-  div.alert.alert-success.alert-dismissable.fade.in
-    button.close(type='button', data-dismiss='alert', aria-hidden='true') &times;
-    = msg
-
-each msg in locals.warning
-  div.alert.alert-warning.alert-dismissable.fade.in
-    button.close(type='button', data-dismiss='alert', aria-hidden='true') &times;
-    = msg
-
-each msg in locals.errors
-  div.alert.alert-danger.alert-dismissable.fade.in
-    button.close(type='button', data-dismiss='alert', aria-hidden='true') &times;
-    = msg
+if locals.warning
+  each msg in locals.warning
+    div.alert.alert-warning.alert-dismissable.fade.in
+      button.close(type='button', data-dismiss='alert', aria-hidden='true') &times;
+      = msg
+if locals.errors
+  each msg in locals.errors
+    div.alert.alert-danger.alert-dismissable.fade.in
+      button.close(type='button', data-dismiss='alert', aria-hidden='true') &times;
+      = msg
