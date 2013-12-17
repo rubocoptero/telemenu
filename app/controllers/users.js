@@ -4,7 +4,8 @@
 var mongoose = require('mongoose'),
     User = mongoose.model('User'),
     VerificationToken = mongoose.model('VerificationToken'),
-    mailer = require('./mailer');
+    mailer = require('./mailer'),
+    errorHandler = require('../helpers/error-handlers');
 
 /**
  * Auth callback
@@ -59,7 +60,7 @@ exports.create = function(req, res) {
     user.save(function(err) {
         if (err) {
             return res.render('users/signup', {
-                errors: err.errors,
+                message: errorHandler.forMongoose(err),
                 user: user
             });
         }

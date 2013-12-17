@@ -15,6 +15,28 @@ describe('<Integration Test>', function() {
             });
         });
 
+        it('should send a error message when the user already exists',
+            function(done) {
+                var user = {
+                    name: 'Full name',
+                    email: 'test@test.com',
+                    username: 'user',
+                    password: 'password'
+                };
+                var req = {
+                    body: user
+                };
+                var res = {
+                    render: function(url, params) {
+                        params.message.should.have.string('ya existe');
+                        done();
+                    }
+                };
+                new User(user).save(function(err) {
+                    users.create(req, res);
+                });
+            });
+
         it('should send a token when an user has been created',
             function(done) {
                 var sendVerificationLinkStub = sinon.stub(mailer, 'sendVerificationLink', function() {
@@ -22,7 +44,6 @@ describe('<Integration Test>', function() {
                         sendVerificationLinkStub.should.have.been.calledOnce;
                         done();
                     });
-                var logInHasBeenCalled = false;
                 var req = {
                     body: {
                         name: 'Full name',
@@ -85,64 +106,5 @@ describe('<Integration Test>', function() {
                     'doesNotMatch'
                 );
             });
-
-        // it('should verify a user using a token with handmade stubs', function(done) {
-        //     var tokenFindOneReal = VerificationToken.findOne;
-        //     var userFindOneReal = User.findOne;
-        //     var returnedUser = {
-        //         verified: false,
-        //         save: function(cb) {}
-        //     };
-        //     VerificationToken.findOne = function(params, cb) {
-        //         cb(undefined, {_userId: 'id'});
-        //     };
-        //     User.findOne = function(params, cb) {
-        //         cb(undefined, returnedUser);
-        //     };
-
-        //     users.verify(
-        //         undefined,
-        //         undefined,
-        //         done,
-        //         'token'
-        //     );
-
-        //     returnedUser.verified.should.be.ok;
-        //     VerificationToken.findOne = tokenFindOneReal;
-        //     User.findOne = userFindOneReal;
-        //     done();
-        // });
-
-        // it('should verify a user using a token with sinon stubs', function(done) {
-        //     var returnedUser = {
-        //         verified: false,
-        //         save: function(cb) {}
-        //     };
-        //     var returnedToken = {
-        //         _userId: 'id'
-        //     };
-        //     var tokenFindOneStub = sinon.stub(VerificationToken, 'findOne',
-        //         function(params, cb) {
-        //             cb(undefined, {_userId: 'id'});
-        //         });
-        //     var userFindOneStub = sinon.stub(User, 'findOne',
-        //         function(params, cb) {
-        //             cb(undefined, returnedUser);
-        //         });
-
-        //     users.verify(
-        //         undefined,
-        //         undefined,
-        //         done,
-        //         'token'
-        //     );
-
-        //     returnedUser.verified.should.be.ok;
-        //     tokenFindOneStub.restore();
-        //     userFindOneStub.restore();
-        //     done();
-        // });
-
-
     });
 });

@@ -12,11 +12,9 @@ block content
       a(href="/auth/google")
         img(src="/img/icons/google.png")
     .col-sm-6
-      if (typeof errors !== 'undefined')
-        .fade.in.alert.alert-block.alert-error.alert.alert-dismissable
+      if message && message.length > 0
+        div.alert.alert-danger.alert-dismissable.fade.in
           button.close(type='button', data-dismiss='alert', aria-hidden='true') &times;
-          ul
-            each error in errors
-              li= error.type
+          = message
 
       block auth

@@ -10,7 +10,7 @@ module.exports = function(app, passport, auth) {
 
     app.post('/users/session', passport.authenticate('local', {
         failureRedirect: '/signin',
-        failureFlash: 'Invalid email or password.'
+        failureFlash: 'Email o contraseña incorrecta.'
     }), users.session);
 
     app.get('/users/me', users.me);

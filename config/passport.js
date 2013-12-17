@@ -36,12 +36,12 @@ module.exports = function(passport) {
                 }
                 if (!user) {
                     return done(null, false, {
-                        message: 'Unknown user'
+                        message: 'Usuario desconocido'
                     });
                 }
                 if (!user.authenticate(password)) {
                     return done(null, false, {
-                        message: 'Invalid password'
+                        message: 'Contraseña invalida'
                     });
                 }
                 return done(null, user);
@@ -98,6 +98,7 @@ module.exports = function(passport) {
                         name: profile.displayName,
                         email: profile.emails[0].value,
                         username: profile.username,
+                        verified: true,
                         provider: 'facebook',
                         facebook: profile._json
                     });

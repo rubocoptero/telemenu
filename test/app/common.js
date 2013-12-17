@@ -5,7 +5,7 @@ global.expect = require('chai').expect;
 global.AssertionError = require('chai').AssertionError;
 global.request = require('supertest');
 global.app = require('../../server');
-console.log('common.js');
+
 global.swallow = function (thrower) {
     try {
         thrower();
