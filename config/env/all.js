@@ -16,7 +16,8 @@ module.exports = {
     'facebook': {
         'clientID': requiredEnvVariable('FB_ID'),
         'clientSecret': requiredEnvVariable('FB_SECRET'),
-        'callbackURL': 'http://localhost:3000/auth/facebook/callback'
+        'callbackURL': 'http://' + requiredEnvVariable('URL_HOST') +
+            '/auth/facebook/callback'
     },
     'twitter': {
         'clientID': 'CONSUMER_KEY',
