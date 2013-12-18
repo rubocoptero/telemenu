@@ -1,7 +1,8 @@
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     VerificationToken = mongoose.model('VerificationToken'),
-    User = mongoose.model('User');
+    User = mongoose.model('User'),
+    mailer = require('../../../app/controllers/mailer');
 
 describe('<Unit Test>', function() {
     var verificationToken;
@@ -26,8 +27,9 @@ describe('<Unit Test>', function() {
         });
 
         it('should generate a new token when save', function(done) {
-            verificationToken.save(function(err) {
+            verificationToken.save(function(err, savedToken) {
                 should.not.exist(err);
+                should.exist(savedToken.token);
                 done();
             });
         });
@@ -64,7 +66,7 @@ describe('<Unit Test>', function() {
             });
         });
     });
-    describe('Statics VerificationToken:', function() {
+    describe('Getting user from a token:', function() {
         var user;
 
         beforeEach(function(done) {
@@ -146,6 +148,77 @@ describe('<Unit Test>', function() {
                         should.not.exist(resultUser);
                         done();
                     });
+            });
+        });
+    });
+
+    describe('Creating a token from user:', function() {
+        var user;
+        var mailerStub;
+
+        beforeEach(function(done) {
+            mailerStub = sinon.stub(mailer, 'sendVerificationLink',
+                function(email, link, cb) {
+                    cb();
+                });
+            user = new User({
+                name: 'Full name',
+                email: 'test@test.com',
+                username: 'user',
+                password: 'password'
+            });
+            user.save(function() {
+                done();
+            });
+        });
+
+        afterEach(function(done) {
+            verificationToken = null;
+            user = null;
+            mailerStub.restore();
+            VerificationToken.remove({}).exec(function() {
+                User.remove({}).exec(done);
+            });
+        });
+
+        it('should return an error when _id is undefined',
+            function(done) {
+                user._id = undefined;
+                VerificationToken.createFor(user, function(err, createdToken) {
+                    should.exist(err);
+                    err.message.should.have.string('Validation failed');
+                    done();
+                });
+            });
+
+        it('should create a token with the same user id which was received',
+            function(done) {
+                VerificationToken.createFor(user,
+                    function(err, createdToken) {
+                        should.not.exist(err);
+                        createdToken.user.should.be.equal(user._id);
+                        done();
+                    });
+            });
+
+        it('should get the verification link', function(done) {
+            VerificationToken.createFor(user, function(err, createdToken) {
+                var verificationLink = createdToken.link;
+
+                verificationLink.should.have.string('http');
+                verificationLink.should.have.string(
+                    '/verificacion/' + createdToken.token
+                );
+                done();
+            });
+        });
+
+        it('should send a email to user with the created token', function(done) {
+            VerificationToken.createFor(user, function(err, createdToken) {
+                should.not.exist(err);
+                mailerStub.should.be.calledOnce;
+                mailerStub.should.be.calledWith(user.email, createdToken.link);
+                done();
             });
         });
     });

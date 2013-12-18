@@ -42,6 +42,7 @@ describe('<Integration Test>', function() {
                 var sendVerificationLinkStub = sinon.stub(mailer, 'sendVerificationLink', function() {
                         /* jshint expr: true */
                         sendVerificationLinkStub.should.have.been.calledOnce;
+                        sendVerificationLinkStub.restore();
                         done();
                     });
                 var req = {

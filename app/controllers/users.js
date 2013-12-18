@@ -54,7 +54,6 @@ exports.session = function(req, res) {
  */
 exports.create = function(req, res) {
     var user = new User(req.body);
-    var verificationToken;
 
     user.provider = 'local';
     user.save(function(err) {
@@ -64,28 +63,19 @@ exports.create = function(req, res) {
                 user: user
             });
         }
-        verificationToken = new VerificationToken({user: user._id});
-        verificationToken.save(function(err, savedToken) {
+        VerificationToken.createFor(user, function(err) {
             if (err) return next(err);
-            mailer.sendVerificationLink(
-                user.email,
-                'https://telemenu.herokuapp.com/verificacion/' + savedToken.token,
-                function(err) {
-                    if (err) return console.log(err);
-                    console.log('Mail sent successfully');
-                    req.logIn(user, function(err) {
-                        if (err) {
-                            return next(err);
-                        } else {
-                            req.flash(
-                                'success',
-                                'Te hemos enviado un correo electrónico con el último paso para completar tu registro.'
-                            );
-                        }
-
-                        return res.redirect('/');
-                    });
-                });
+            req.logIn(user, function(err) {
+                if (err) {
+                    return next(err);
+                } else {
+                    req.flash(
+                        'success',
+                        'Te hemos enviado un correo electrónico que contiene un enlace de verificación para completar tu registro.'
+                    );
+                }
+                return res.redirect('/');
+            });
         });
     });
 };
