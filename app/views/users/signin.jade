@@ -1,7 +1,7 @@
 extends auth
 
 block auth
-  form.signin.form-horizontal(action="/users/session", method="post")
+  form.signin.form-horizontal(action=actionValue, method="post")
     .form-group
       label.control-label.col-sm-4(for='email') Email
       .col-sm-8

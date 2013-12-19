@@ -1,3 +1,5 @@
+var urlHelper = require('../app/helpers/url');
+
 module.exports = function(app, passport, auth) {
     //User Routes
     var users = require('../app/controllers/users');
@@ -8,15 +10,20 @@ module.exports = function(app, passport, auth) {
     //Setting up the users api
     app.post('/users', users.create);
 
-    app.post('/users/session', passport.authenticate('local', {
-        failureRedirect: '/signin',
-        failureFlash: 'Email o contraseña incorrecta.'
-    }), users.session);
+    app.post('/users/session', function(req, res, next) {
+        var failtureUrl = urlHelper.buildUrlWithParams(
+            '/signin',
+            req.query
+        );
+        passport.authenticate('local', {
+            failureRedirect: failtureUrl,
+            failureFlash: 'Email o contraseña incorrecta.'
+        })(req, res, next);
+    }, users.session);
 
     app.get('/users/me', users.me);
     app.get('/users/:userId', users.show);
 
-    app.get('/verificacion/:token', users.verification);
 
     //Setting the facebook oauth routes
     app.get('/auth/facebook', passport.authenticate('facebook', {
@@ -61,7 +68,13 @@ module.exports = function(app, passport, auth) {
 
     //Finish with setting up the userId param
     app.param('userId', users.user);
-    app.param('token', users.verify);
+
+    //Verification Routes
+    var verification = require('../app/controllers/verification');
+
+    app.get('/verificacion/reenviar', auth.haveToLogin, verification.resend);
+    app.get('/verificacion/:token', verification.verification);
+    app.param('token', verification.verify);
 
     //Article Routes
     var articles = require('../app/controllers/articles');

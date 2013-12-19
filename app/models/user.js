@@ -134,4 +134,5 @@ userSchema.methods = {
     }
 };
 
-mongoose.model('User', userSchema);
+var userModel = mongoose.model('User', userSchema);
+module.exports = userModel;

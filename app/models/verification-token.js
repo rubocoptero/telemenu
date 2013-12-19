@@ -59,4 +59,5 @@ var verificationTokenModel = mongoose.model(
     'VerificationToken',
     verificationTokenSchema
 );
-exports.verificationTokenModel = verificationTokenModel;
+
+module.exports = verificationTokenModel;

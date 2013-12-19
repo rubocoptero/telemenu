@@ -1,11 +1,10 @@
 /**
  * Module dependencies.
  */
-var mongoose = require('mongoose'),
-    User = mongoose.model('User'),
-    VerificationToken = mongoose.model('VerificationToken'),
-    mailer = require('./mailer'),
-    errorHandler = require('../helpers/error-handlers');
+var User = require('../models/user'),
+    VerificationToken = require('../models/verification-token'),
+    errorHandler = require('../helpers/error-handlers'),
+    urlHelper = require('../helpers/url');
 
 /**
  * Auth callback
@@ -18,9 +17,15 @@ exports.authCallback = function(req, res, next) {
  * Show login form
  */
 exports.signin = function(req, res) {
+    var actionUrl = urlHelper.buildUrlWithParams(
+        '/users/session',
+        req.query
+    );
+
     res.render('users/signin', {
         title: 'Signin',
-        message: req.flash('error')
+        message: req.flash('error'),
+        actionValue: actionUrl
     });
 };
 
@@ -46,6 +51,9 @@ exports.signout = function(req, res) {
  * Session
  */
 exports.session = function(req, res) {
+    if (req.query.afterGoTo) {
+        return res.redirect(req.query.afterGoTo);
+    }
     res.redirect('/');
 };
 
@@ -113,29 +121,4 @@ exports.user = function(req, res, next, id) {
             req.profile = user;
             next();
         });
-};
-
-exports.verification = function(req, res) {
-    res.redirect('/');
-    // res.jsonp(req.verified || null);
-};
-
-exports.verify = function(req, res, next, token) {
-    VerificationToken.getUserByToken(token, function(err, resultUser) {
-        if (err) return next(err);
-        if (!resultUser) {
-            req.flash(
-                'errors',
-                'La verificación ha fallado. Es posible que su código de verificación haya caducado.'
-            );
-            return next();
-        }
-        resultUser.verified = true;
-        resultUser.save(function(err, savedUser) {
-            if (err) return next(err);
-            req.verified = savedUser.verified;
-            req.flash('success', 'Felicidades! Su registro se ha completado con éxito. Ya es uno más de nuestros usuarios.');
-            next();
-        });
-    });
 };

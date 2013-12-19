@@ -8,6 +8,13 @@ exports.requiresLogin = function(req, res, next) {
     next();
 };
 
+exports.haveToLogin = function(req, res, next) {
+    if (!req.isAuthenticated()) {
+        res.redirect('/signin?afterGoTo=' + req.path);
+    }
+    next();
+};
+
 /**
  * User authorizations routing middleware
  */
