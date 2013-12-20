@@ -26,5 +26,15 @@ exports.verify = function(req, res, next, token) {
 };
 
 exports.resend = function(req, res) {
-    res.jsonp('Reenviada');
+    VerificationToken.createFor(req.user, function(err) {
+        if (err) {
+            req.flash('errors', err.message);
+            return res.redirect('/');
+        }
+
+        req.flash('success',
+            'Te hemos enviado un correo electrónico con el enlace de verificación.' +
+            'Si no lo encuentras, por favor, asegurate que no está en la carpeta de spam');
+        res.redirect('/');
+    });
 };
