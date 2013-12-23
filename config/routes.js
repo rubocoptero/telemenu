@@ -27,11 +27,13 @@ module.exports = function(app, passport, auth) {
 
     //Setting the facebook oauth routes
     app.get('/auth/facebook', passport.authenticate('facebook', {
+        successRedirect: '/',
         scope: ['email', 'user_about_me'],
         failureRedirect: '/signin'
     }), users.signin);
 
     app.get('/auth/facebook/callback', passport.authenticate('facebook', {
+        successRedirect: '/',
         failureRedirect: '/signin'
     }), users.authCallback);
 
