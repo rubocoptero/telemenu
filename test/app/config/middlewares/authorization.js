@@ -1,7 +1,6 @@
 var auth = require('../../../../config/middlewares/authorization');
 
 describe('Authorization Middleware:', function() {
-
     it('should redirect to login when a user is not authenticated', function() {
         var req = {
             isAuthenticated: function() { return false; },

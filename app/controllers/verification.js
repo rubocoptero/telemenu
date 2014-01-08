@@ -1,4 +1,5 @@
-var VerificationToken = require('../models/verification-token');
+var mongoose = require('mongoose'),
+    VerificationToken = mongoose.model('VerificationToken');
 
 exports.verification = function(req, res) {
     res.redirect('/');

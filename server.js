@@ -23,7 +23,7 @@ var db = mongoose.connect(config.db);
 console.log('DB config: ' + config.db);
 
 //Bootstrap models
-var models_path = __dirname + '/app/models';
+var models_path = __dirname + '/app/db';
 var walk = function(path) {
     fs.readdirSync(path).forEach(function(file) {
         var newPath = path + '/' + file;

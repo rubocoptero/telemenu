@@ -5,8 +5,6 @@ var mongoose = require('mongoose'),
     mailer = require('../../../app/controllers/mailer'),
     globals = require('../../../config/globals');
 
-
-
 describe('<Integration Test>', function() {
     describe('Controller Users:', function() {
         afterEach(function(done) {

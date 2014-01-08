@@ -1,8 +1,9 @@
 /**
  * Module dependencies.
  */
-var User = require('../models/user'),
-    VerificationToken = require('../models/verification-token'),
+var mongoose = require('mongoose'),
+    User = mongoose.model('User'),
+    VerificationToken = mongoose.model('VerificationToken'),
     errorHandler = require('../helpers/error-handlers'),
     urlHelper = require('../helpers/url');
 

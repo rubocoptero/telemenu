@@ -3,7 +3,7 @@ var mailer = require('../../../app/controllers/mailer'),
 
 describe('<Unit Test>', function() {
     describe('Mailer util:', function() {
-        describe('sendVerificationLink', function() {
+        describe('Sending verification link:', function() {
             it('should send a mail through predefined transport', function() {
                 var transport = globals.mailTransport;
                 var mock = sinon.mock(transport);
@@ -15,7 +15,7 @@ describe('<Unit Test>', function() {
                 mock.restore();
             });
 
-            it('should send a mail with the verification link and destination address', function() {
+            it('should send a mail to a destination address with the verification link', function() {
                 var verificationLinkExpected = 'this is a verification link';
                 var mailExpected = 'user@domain.com';
                 var transport = globals.mailTransport;
