@@ -49,18 +49,15 @@ describe('<Integration Test>', function() {
                 should.not.exist(err);
                 VerificationToken.createFor(user, function(err, createdToken) {
                     should.not.exist(err);
-                    console.log(createdToken);
                     token = createdToken.token;
 
                     user.verified.should.be.false;
 
                     request(app)
-                        .get('/verification/' + token)
+                        .get('/verificacion/' + token)
                         .expect(200)
                         .end(function(err, res) {
-                            console.log(res);
                             User.findById(user._id, function(err, retrievedUser) {
-                                cosole.log(retrievedUser);
                                 retrievedUser.verified.should.be.true;
                                 done();
                             });
@@ -69,59 +66,13 @@ describe('<Integration Test>', function() {
             });
         });
 
-        // it('using a token does not store for verify user', function(done) {
-        //     var token = 'tokenDoesNotMatch';
-        //     var VerificationTokenMock = sinon.mock(VerificationToken);
-        //     VerificationTokenMock
-        //         .expects('getUserByToken').once().returns();
-        //     request(app)
-        //         .get('/verify/' + token)
-        //         .end(function (err, res) {
-        //             if (err) throw err;
-        //             VerificationTokenMock.verify();
-        //             VerificationTokenMock.restore();
-        //             done();
-        //         });
-        //     VerificationTokenMock.verify();
-        //     VerificationTokenMock.restore();
-        // });
-
-        // it('using a token does not store for verify user SPYING', function(done) {
-        //     var token = 'tokenDoesNotMatch';
-        //     var getUserByTokenSpy = sinon.spy(
-        //         VerificationToken,
-        //         'getUserByToken'
-        //     );
-            // request(app)
-            //     .get('/verify/' + token)
-            //     .end(function (err, res) {
-            //         console.log(err);
-            //         if (err) throw err;
-            //         getUserByTokenSpy.should.be.calledOnce;
-            //         getUserByTokenSpy.restore();
-            //         done();
-            //     });
-        // });
-
-        // it('using a token does not store for verify user stub', function(done) {
-        //     var token = 'tokenDoesNotMatch';
-        //     var verifyStub = sinon.stub(
-        //         users,
-        //         'verify',
-        //         function(req, res, next, token) {
-        //             token.should.not.be.equal(token);
-        //             req.verified = true;
-        //             next();
-        //         }
-        //     );
+        // it('GET /verificacion/reenviar should resend a new token to the user mail address', function() {
 
         //     request(app)
-        //         .get('/verify/' + token)
-        //         .end(function (err, res) {
-        //             if (err) throw err;
+        //         .get('/verificacion/reenviar')
+        //         .expect(200)
+        //         .end(function(err, res) {
 
-        //             verifyStub.restore();
-        //             done();
         //         });
         // });
 
