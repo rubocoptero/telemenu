@@ -1,47 +1,64 @@
-var mongoose = require('mongoose'),
-    Schema = mongoose.Schema,
-    _ = require('underscore');
+var appContainer = require('../../config/dependencies/container');
 
-var placeSchema = new Schema({
-    user: {type: Schema.ObjectId, ref: 'User'},
-    name: { type: String, required: true },
-    address: {
-        str: {type: String, required: true },
-        lat: {type: Number, required: true },
-        lng: {type: Number, required: true }
-    },
-    description: String,
-    photo: String,
-    telephone: { type: String, required: true },
-    reservations_constrains: {
-        capacity: {
-            type: String,
-            min: 1,
-            required: true
+appContainer.resolve(function (mongoose, mongooseAttachments, uploadPath) {
+    var placeSchema = new mongoose.Schema({
+        user: {type: mongoose.Schema.ObjectId, ref: 'User'},
+        name: { type: String, required: true },
+        address: {
+            str: {type: String, required: true },
+            lat: {type: Number, required: true },
+            lng: {type: Number, required: true }
         },
-        time_per_person: { type: Number, required: true },
-        opening_hours: [{
-            days: [{
-                type: String,
-                enum: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun' ],
-            }],
-            hours: [{
-                from: {type: Number, min: 0, max: 86400, required: true},
-                to: {type: Number, min: 0, max: 86400, required: true}
-            }]
-        }]
-    },
-    feedback: {type: Schema.ObjectId, ref: 'Feedback'}
-});
+        description: String,
+        telephone: { type: String, required: true },
+        reservations_constrains: {
+            capacity: {
+                type: Number,
+                min: 1,
+                required: true
+            },
+            minutes_per_customer: { type: Number, required: true }
+        },
+        feedback: {type: mongoose.Schema.ObjectId, ref: 'Feedback'}
+    });
 
-placeSchema.statics = {
-    load: function (id, cb) {
+    placeSchema.plugin(mongooseAttachments, {
+        directory: uploadPath,
+        storage: { providerName: 'localfs' },
+        properties: {
+            image: {
+                styles: {
+                    original: {},
+                    thumb: {
+                        thumbnail: '100x100',
+                        '$format': 'jpg'
+                    }
+                }
+            }
+        }
+    });
+
+    placeSchema.statics.load = function (id, cb) {
         this.findOne({ _id : id })
         .populate('feedback')
         .populate('user')
         .exec(cb);
-    }
-};
+    };
+
+    placeSchema.statics.createWithImage = function (doc, imgPath, cb) {
+        var place = new placeModel(doc);
+        place.attach('image', { path: imgPath }, function(err) {
+            if (err) return cb(err);
+            place.save(function(err, savedPlace) {
+                if (err) return cb(err);
+                cb(null, savedPlace);
+            });
+        });
+    };
 
 
-mongoose.model('Place', placeSchema);
+
+    var placeModel = mongoose.model('Place', placeSchema);
+
+    module.exports = placeModel;
+});

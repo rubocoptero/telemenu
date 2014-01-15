@@ -12,7 +12,17 @@ var menuSchema = new Schema({
             foods: [String]
         }]
     }],
-    foods_history: [String]
+    foods_history: [String],
+    opening_hours: [{
+        days: [{
+            type: String,
+            enum: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun' ],
+        }],
+        hours: [{
+            from: {type: Number, min: 0, max: 86400, required: true},
+            to: {type: Number, min: 0, max: 86400, required: true}
+        }]
+    }]
 });
 
 menuSchema.statics = {

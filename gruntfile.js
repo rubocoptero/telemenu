@@ -6,45 +6,45 @@ module.exports = function(grunt) {
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         paths: {
-            frontend: 'public',
-            backend: 'app',
+            client: 'public',
+            server: 'app',
             dist: 'dist',
             test: 'test',
-            frontendTest: 'test/public',
-            backendTest: 'test/app'
+            clientTests: 'test/client',
+            serverTests: 'test/server'
         },
         watch: {
-            backend: {
+            server: {
                 files: [
-                    '<%= paths.backendTest %>/**/*.js',
-                    '<%= paths.backend %>/**/*.js'
+                    '<%= paths.serverTests %>/unit/**/*.js',
+                    '<%= paths.server %>/**/*.js'
                 ],
-                tasks: ['jshint:backend', 'test:backend']
+                tasks: ['jshint:server', 'test:server:unit']
             },
             jade: {
-                files: ['<%= paths.backend %>/views/**'],
+                files: ['<%= paths.server %>/views/**'],
                 options: {
                     livereload: true,
                 },
             },
-            frontend: {
+            client: {
                 files: [
-                    '<%= paths.frontend %>/js/**',
-                    '<%= paths.frontendTest %>/js/**/*.js'
+                    '<%= paths.client %>/js/**',
+                    '<%= paths.clientTests %>/js/**/*.js'
                 ],
-                tasks: ['jshint:frontend'],
+                tasks: ['jshint:client'],
                 options: {
                     livereload: true,
                 },
             },
             html: {
-                files: ['<%= paths.frontend %>/views/**'],
+                files: ['<%= paths.client %>/views/**'],
                 options: {
                     livereload: true,
                 },
             },
             compass: {
-                files: ['<%= paths.frontend %>/styles/sass/**/*.{scss, sass}'],
+                files: ['<%= paths.client %>/styles/sass/**/*.{scss, sass}'],
                 tasks: ['compass:server'],
                 options: {
                     livereload: true
@@ -52,19 +52,22 @@ module.exports = function(grunt) {
             }
         },
         jshint: {
+            options: {
+                expr: true
+            },
             all: [
                 'gruntfile.js',
-                '<%= paths.frontend %>/js/**/*.js',
+                '<%= paths.client %>/js/**/*.js',
                 '<%= paths.test %>/**/*.js',
-                '<%= paths.backend %>/**/*.js'
+                '<%= paths.server %>/**/*.js'
             ],
-            backend: [
-                '<%= paths.backend %>/**/*.js',
-                '<%= paths.backendTest %>/**/*.js'
+            server: [
+                '<%= paths.server %>/**/*.js',
+                '<%= paths.serverTests %>/**/*.js'
             ],
-            frontend: [
-                '<%= paths.frontend %>/js/**/*.js',
-                '<%= paths.frontendTest %>/js/**/*.js'
+            client: [
+                '<%= paths.client %>/js/**/*.js',
+                '<%= paths.clientTests %>/js/**/*.js'
             ]
         },
         nodemon: {
@@ -74,7 +77,7 @@ module.exports = function(grunt) {
                     args: [],
                     ignoredFiles: ['README.md', 'node_modules/**', '.DS_Store'],
                     watchedExtensions: ['js'],
-                    watchedFolders: ['<%= paths.backend %>', 'config'],
+                    watchedFolders: ['<%= paths.server %>', 'config'],
                     debug: true,
                     delayTime: 1,
                     env: {
@@ -94,38 +97,39 @@ module.exports = function(grunt) {
         },
         karma: {
             unit: {
-                configFile: '<%= paths.frontendTest %>/karma-unit.conf.js',
+                configFile: '<%= paths.clientTests %>/karma-unit.conf.js',
                 autoWatch: false,
                 singleRun: true
             },
             unit_auto: {
-                configFile: '<%= paths.frontendTest %>/karma-unit.conf.js'
+                configFile: '<%= paths.clientTests %>/karma-unit.conf.js'
             },
             midway: {
-                configFile: '<%= paths.frontendTest %>/karma-midway.conf.js',
+                configFile: '<%= paths.clientTests %>/karma-midway.conf.js',
                 autoWatch: false,
                 singleRun: true
             },
             midway_auto: {
-                configFile: '<%= paths.frontendTest %>/karma-midway.conf.js'
+                configFile: '<%= paths.clientTests %>/karma-midway.conf.js'
             },
             e2e: {
-                configFile: '<%= paths.frontendTest %>/karma-e2e.conf.js',
+                configFile: '<%= paths.clientTests %>/karma-e2e.conf.js',
                 autoWatch: false,
                 singleRun: true
             },
             e2e_auto: {
-                configFile: '<%= paths.frontendTest %>/karma-e2e.conf.js'
+                configFile: '<%= paths.clientTests %>/karma-e2e.conf.js'
             }
         },
         mochaTest: {
             options: {
                 reporter: 'spec',
                 require: [
-                    '<%= paths.backendTest %>/common.js'
+                    '<%= paths.serverTests %>/common.js'
                 ]
             },
-            src: ['<%= paths.backendTest %>/**/*.js']
+            unit: ['<%= paths.serverTests %>/unit/**/*.js'],
+            api: ['<%= paths.serverTests %>/api/**/*.js']
         },
         env: {
             test: {
@@ -134,9 +138,9 @@ module.exports = function(grunt) {
         },
         compass: {
             options: {
-                sassDir: '<%= paths.frontend %>/styles/sass',
-                cssDir: '<%= paths.frontend %>/styles/css',
-                importPath: '<%= paths.frontend %>/lib'
+                sassDir: '<%= paths.client %>/styles/sass',
+                cssDir: '<%= paths.client %>/styles/css',
+                importPath: '<%= paths.client %>/lib'
             },
             server: {
                 options: {
@@ -162,17 +166,18 @@ module.exports = function(grunt) {
     grunt.registerTask('default', ['compass', 'jshint:all', 'concurrent:server']);
 
     //Test task.
-    grunt.registerTask('test', ['env:test', 'mochaTest']);
-    grunt.registerTask('test:backend', ['env:test', 'mochaTest']);
+    grunt.registerTask('test', ['env:test', 'mochaTest:unit', 'mochaTest:api']);
+    grunt.registerTask('test:server:unit', ['env:test', 'mochaTest:unit']);
+    grunt.registerTask('test:server:api', ['env:test', 'mochaTest:api']);
     grunt.registerTask('test:watch', [
         'env:test',
-        'mochaTest',
-        'watch:backend'
+        'mochaTest:unit',
+        'watch:server'
     ]);
 
 
-    // Maybe use connect as server when test frontendend
-    // grunt.registerTask('test:frontend', ['connect:testserver','karma:unit','karma:midway', 'karma:e2e']);
+    // Maybe use connect as server when test clientend
+    // grunt.registerTask('test:client', ['connect:testserver','karma:unit','karma:midway', 'karma:e2e']);
     // grunt.registerTask('test:unit', ['karma:unit']);
     // grunt.registerTask('test:midway', ['connect:testserver','karma:midway']);
     // grunt.registerTask('test:e2e', ['connect:testserver', 'karma:e2e']);

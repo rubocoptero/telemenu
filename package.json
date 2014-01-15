@@ -39,7 +39,10 @@
     "grunt-cli": "latest",
     "grunt-env": "latest",
     "nodemailer": "~0.5.13",
-    "node-uuid": "~1.4.1"
+    "node-uuid": "~1.4.1",
+    "mongoose-attachments-localfs": "~0.1.0",
+    "mongoose-attachments": "~0.1.0",
+    "dependable": "~0.2.5"
   },
   "devDependencies": {
     "supertest": "~0.8.2",
