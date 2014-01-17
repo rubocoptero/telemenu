@@ -1,0 +1,5 @@
+git push origin develop
+git checkout staging
+git merge develop
+git push origin staging
+git push heroku staging:master
