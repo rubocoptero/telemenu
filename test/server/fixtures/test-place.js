@@ -1,4 +1,4 @@
-global.appContainer.resolve(function (mongoose, imageFixture) {
+global.appContainer.resolve(function (_, mongoose, imageFixture) {
     var TestPlace = function() {
         var placeData = {
             user: new mongoose.Types.ObjectId(),
@@ -15,9 +15,17 @@ global.appContainer.resolve(function (mongoose, imageFixture) {
                 minutes_per_customer: 60
             }
         };
+        var placeDataToAddImage =
+            _.clone(placeData);
 
         return {
-            getData: function() { return placeData; },
+            getDataWithImage: function() {
+                placeDataToAddImage.image = imageFixture.getPath();
+                return placeDataToAddImage;
+            },
+            getDataWithoutImage: function() {
+                return placeData;
+            },
             getImage: imageFixture.getPath
         };
     };

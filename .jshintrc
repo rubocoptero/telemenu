@@ -1,7 +1,7 @@
 {
     "node": true, // Enable globals available when code is running inside of the NodeJS runtime environment.
     "browser": true, // Standard browser globals e.g. `window`, `document`.
-    "expr": true, // Chai assertions ending with an expr like 'obj.should.be.ok'
+    "expr": true, // Chai assertions ending like 'obj.should.be.ok'
     "es5": true, // Allow EcmaScript 5 syntax.
     "esnext": true, // Allow ES.next specific features such as `const` and `let`.
     "bitwise": false, // Prohibit bitwise operators (&, |, ^, etc.).

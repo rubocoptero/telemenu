@@ -6,7 +6,9 @@ container.register('uploadPath',
     path.resolve(__dirname, '../../public/img/uploads'));
 
 // App dependencies
-
+container.register('_', function() {
+    return require('underscore');
+});
 // Persistence Drivers
 container.register('mongoose', require('mongoose'));
 container.register('mongooseAttachments', function () {
