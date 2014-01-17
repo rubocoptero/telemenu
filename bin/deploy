@@ -1,5 +1,10 @@
+echo '====================== push develop -> origin ======================'
 git push origin develop
+echo '======================== checkout -> staging ======================='
 git checkout staging
+echo '======================== merge with develop ========================'
 git merge develop
+echo '====================== push staging -> origin ======================'
 git push origin staging
+echo '===================== deploy staging -> heroku ====================='
 git push heroku staging:master
