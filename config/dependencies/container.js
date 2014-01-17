@@ -44,29 +44,15 @@ container.register('Place', function() {
     return require('../../app/models/place');
 });
 
-
 container.register('auth', require('../middlewares/authorization'));
 container.register('mailer', require('../../app/controllers/mailer'));
 container.register('globals', require('../globals'));
-container.register('errorHandler', require('../../app/helpers/error-handlers'));
+container.register('errorHandler',
+    require('../../app/helpers/error-handlers'));
 container.register('urlHelper', require('../../app/helpers/url'));
-container.register('consoleUtil', require('../../test/server/utils/console'));
 
-// Test specific dependencies
-container.register('TestUser', function() {
-    return require('../../test/server/fixtures/test-user');
-});
-container.register('TestPlace', function() {
-    return require('../../test/server/fixtures/test-place');
-});
-container.register('dbTestUtil', function() {
-    return require('../../test/server/utils/db');
-});
-container.register('fsTestUtil', function() {
-    return require('../../test/server/utils/fs');
-});
-container.register('imageFixture', function() {
-    return require('../../test/server/fixtures/image');
-});
+if (process.env.NODE_ENV === 'test') {
+    require('./test.js')(container);
+}
 
 module.exports = container;
