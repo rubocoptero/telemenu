@@ -78,6 +78,15 @@ module.exports = function(app, passport, auth) {
     app.get('/verificacion/:token', verification.verification);
     app.param('token', verification.verify);
 
+    // Places Routes
+    var places = require('../app/controllers/places');
+    app.get('/places', auth.requiresLogin, places.mine);
+    app.post('/places', auth.requiresLogin, places.create);
+    app.put('/places/:placeId', auth.requiresLogin, auth.place.hasAuthorization, places.update);
+    app.del('/places/:placeId', auth.requiresLogin, auth.place.hasAuthorization, places.destroy);
+
+    app.param('placeId', places.place);
+
     //Article Routes
     var articles = require('../app/controllers/articles');
     app.get('/articles', articles.all);

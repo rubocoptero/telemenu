@@ -33,7 +33,7 @@ exports.haveToLogin = function(req, res, next) {
  */
 exports.user = {
     hasAuthorization: function(req, res, next) {
-        if (req.profile.id != req.user.id) {
+        if (req.profile.id !== req.user.id) {
             return res.send(403, messages.notAuthorized);
         }
         next();
@@ -45,7 +45,18 @@ exports.user = {
  */
 exports.article = {
     hasAuthorization: function(req, res, next) {
-        if (req.article.user.id != req.user.id) {
+        console.log(req.user);
+        console.log(req.article.user);
+        if (req.article.user.id !== req.user.id) {
+            return res.send(403, messages.notAuthorized);
+        }
+        next();
+    }
+};
+
+exports.place = {
+    hasAuthorization: function (req, res, next) {
+        if (req.place.user.id !== req.user.id) {
             return res.send(403, messages.notAuthorized);
         }
         next();

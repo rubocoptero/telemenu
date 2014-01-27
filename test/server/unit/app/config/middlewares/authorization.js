@@ -42,5 +42,34 @@ global.appContainer.resolve(function (auth) {
 
             nextSpy.should.be.calledOnce;
         });
+
+        it('should send a 403 when user is not the owner of the place',
+            function() {
+                var req = {
+                    user: { id: 'ID' },
+                    place: {user: {id: 'differentID'}}
+                };
+                var res = {
+                    send: sinon.spy()
+                };
+
+                auth.place.hasAuthorization(req, res, undefined);
+
+                res.send.should.be.calledOnce;
+                res.send.should.be.calledWith(403);
+            });
+
+        it('should call next when user is the owner of the place',
+            function() {
+                var req = {
+                    user: { id: 'sameID' },
+                    place: {user: {id: 'sameID'}}
+                };
+                var nextSpy = sinon.spy();
+
+                auth.place.hasAuthorization(req, undefined, nextSpy);
+
+                nextSpy.should.be.calledOnce;
+            });
     });
 });

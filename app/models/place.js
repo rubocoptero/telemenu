@@ -1,4 +1,6 @@
-global.appContainer.resolve(function (PlaceStore) {
+var appContainer = require('../../config/dependencies/container');
+
+appContainer.resolve(function (PlaceStore) {
     var place = function () {
         var self = {};
         var store = PlaceStore;

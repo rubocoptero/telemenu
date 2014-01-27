@@ -1,5 +1,14 @@
 
 module.exports = function (container) {
+    // Third party test dependencies
+    container.register('passportStub', require('passport-stub'));
+    container.register('fixturesLoader', require('pow-mongoose-fixtures'));
+
+    // Fixtures
+    container.register('fixtures', function() {
+        return require('../../test/server/fixtures/fixtures');
+    });
+
     // Test specific dependencies
     container.register('TestUser', function() {
         return require('../../test/server/fixtures/test-user');

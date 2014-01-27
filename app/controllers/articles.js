@@ -24,6 +24,7 @@ exports.article = function(req, res, next, id) {
 exports.create = function(req, res) {
     var article = new Article(req.body);
     article.user = req.user;
+    console.log(req.user);
 
     article.save(function(err) {
         if (err) {
@@ -42,7 +43,9 @@ exports.create = function(req, res) {
  */
 exports.update = function(req, res) {
     var article = req.article;
-
+    console.log('Update:');
+    console.log(req.body);
+    console.log(article);
     article = _.extend(article, req.body);
 
     article.save(function(err) {

@@ -41,7 +41,7 @@ appContainer.resolve(function (mongoose, mongooseAttachments, uploadPath) {
     placeSchema.statics.load = function (id, cb) {
         this.findOne({ _id : id })
         .populate('feedback')
-        .populate('user')
+        .populate('user', 'name username')
         .exec(cb);
     };
 
@@ -56,6 +56,9 @@ appContainer.resolve(function (mongoose, mongooseAttachments, uploadPath) {
         });
     };
 
+    placeSchema.statics.findByUserId = function (id, cb) {
+        this.find({user: id}, 'name', cb);
+    };
 
 
     var placeModel = mongoose.model('Place', placeSchema);

@@ -18,6 +18,7 @@ global.appContainer.resolve(function (_, mongoose, imageFixture) {
         var placeDataToAddImage =
             _.clone(placeData);
 
+
         return {
             getDataWithImage: function() {
                 placeDataToAddImage.image = imageFixture.getPath();

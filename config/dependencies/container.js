@@ -38,6 +38,9 @@ container.register('usersController', function() {
 container.register('verificationController', function () {
     return require('../../app/controllers/verification');
 });
+container.register('placesController', function() {
+    return require('../../app/controllers/places');
+});
 
 // Models
 container.register('Place', function() {

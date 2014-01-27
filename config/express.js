@@ -5,7 +5,8 @@ var express = require('express'),
     MongoStore = require('connect-mongo')(express),
     flash = require('connect-flash'),
     helpers = require('view-helpers'),
-    config = require('./config');
+    config = require('./config'),
+    path = require('path');
 
 module.exports = function(app, passport, db) {
     app.set('showStackError', true);
@@ -42,7 +43,10 @@ module.exports = function(app, passport, db) {
         app.use(express.cookieParser());
 
         //bodyParser should be above methodOverride
-        app.use(express.bodyParser());
+        app.use(express.bodyParser({
+            keepExtensions: true,
+            uploadDir: path.resolve(__dirname, '../.tmp/')
+        }));
         app.use(express.methodOverride());
 
         //express/mongo session storage
