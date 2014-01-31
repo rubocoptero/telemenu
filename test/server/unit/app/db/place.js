@@ -5,7 +5,7 @@ global.appContainer.resolve(function (PlaceStore, UserStore, TestPlace, fixtures
                 PlaceStore.remove({}).exec(done);
             });
 
-            it('should save itself with an image', function(done) {
+            it('should create a place with an image', function(done) {
                 var place = PlaceStore.createWithImage(
                     TestPlace.getDataWithoutImage(),
                     TestPlace.getImage(),
@@ -25,8 +25,45 @@ global.appContainer.resolve(function (PlaceStore, UserStore, TestPlace, fixtures
                             places[0].name.should.be.equal('The Awesome Place');
                             UserStore.remove({}).exec(done);
                         });
-                })
-            })
+                });
+            });
+
+            it('should save a place with its image', function (done) {
+                var newLng = 666;
+                PlaceStore.createWithImage(
+                    fixtures.getPlaceData(),
+                    fixtures.getPlaceImage(),
+                    function (err, createdPlace) {
+                        should.not.exist(err);
+                        createdPlace.address.lng = newLng;
+                        createdPlace.saveWithImage(
+                            fixtures.getPlaceImage(),
+                            function (err, savedPlace) {
+                                should.not.exist(err);
+                                savedPlace.address.lng.should.be.equal(newLng);
+                                done();
+                            });
+                    });
+            });
+
+            it('should save a place without image', function (done) {
+                var newLng = 666;
+                PlaceStore.createWithImage(
+                    fixtures.getPlaceData(),
+                    fixtures.getPlaceImage(),
+                    function (err, createdPlace) {
+                        should.not.exist(err);
+                        createdPlace.address.lng = newLng;
+                        createdPlace.saveWithImage(
+                            null,
+                            function (err, savedPlace) {
+                                should.not.exist(err);
+                                console.log(savedPlace);
+                                savedPlace.address.lng.should.be.equal(newLng);
+                                done();
+                            });
+                    });
+            });
         });
     });
 });

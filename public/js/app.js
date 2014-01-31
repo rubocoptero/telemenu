@@ -8,11 +8,12 @@ window.app = angular.module('telemenu', [
     'telemenu.articles',
     'telemenu.menus',
     'telemenu.places',
-    'telemenu.maps'
+    'telemenu.maps',
+    'angularFileUpload'
 ]);
 
-angular.module('telemenu.system', []);
-angular.module('telemenu.articles', []);
-angular.module('telemenu.menus', []);
-angular.module('telemenu.maps', []);
-angular.module('telemenu.places', []);
+window.angular.module('telemenu.system', []);
+window.angular.module('telemenu.articles', []);
+window.angular.module('telemenu.places', []);
+window.angular.module('telemenu.menus', []);
+window.angular.module('telemenu.maps', []);

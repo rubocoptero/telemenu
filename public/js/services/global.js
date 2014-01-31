@@ -1,4 +1,4 @@
-angular.module('telemenu.system').factory("Global", [function() {
+window.angular.module('telemenu.system').factory('Global', function() {
     var _this = this;
     _this._data = {
         user: window.user,
@@ -7,4 +7,4 @@ angular.module('telemenu.system').factory("Global", [function() {
     };
 
     return _this._data;
-}]);
+});

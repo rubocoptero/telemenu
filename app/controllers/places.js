@@ -2,22 +2,25 @@ var appContainer = require('../../config/dependencies/container');
 
 appContainer.resolve(function (PlaceStore, _) {
     exports.create = function(req, res, next) {
-        req.body.user = req.user;
-        PlaceStore.createWithImage(req.body.place, req.files.image.path, function (err, savedPlace) {
+        var place = JSON.parse(req.body.place);
+        place.user = req.user;
+
+        PlaceStore.createWithImage(place, req.files.image.path, function (err, savedPlace) {
             if (err) return next(err);
             res.jsonp(savedPlace);
         });
     };
 
     exports.update = function (req, res, next) {
-        var place = req.place;
-        place = _.extend(place, req.body);
+        var oldPlace = req.place,
+            newPlace = JSON.parse(req.body.place),
+            place = _.extend(oldPlace, newPlace),
+            imagePath = (req.files? req.files.image.path : null);
 
-        place.save(function(err) {
-            if (err) return next(err);
-
-            res.jsonp(place);
-        });
+        place.saveWithImage(imagePath, function (err, savedPlace) {
+                if (err) return next(err);
+                res.jsonp(savedPlace);
+            });
     };
 
     exports.destroy = function (req, res, next) {
@@ -48,5 +51,9 @@ appContainer.resolve(function (PlaceStore, _) {
             req.place = place;
             next();
         });
+    };
+
+    exports.show = function (req, res, next) {
+        res.jsonp(req.place);
     };
 });

@@ -29,6 +29,7 @@ global.appContainer.resolve(function (fixturesLoader, mongoose, UserStore, image
         getUserId: function () { return userId; },
         getPlaceId: function () { return placeId; },
         getLoginUser: getLoginUser,
-        getPlaceImage: imageFixture.getPath
+        getPlaceImage: imageFixture.getPath,
+        getPlaceData: function() { return fixturePlaces.Place[0]; }
     };
 });

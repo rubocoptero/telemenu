@@ -40,19 +40,13 @@ global.appContainer.resolve(function (UserStore, dbTestUtil, passportStub, TestP
 
             it('POST /places/ should create a new place with image',
                 function(done) {
-                    var placeImage = fixtures.getPlaceImage();
+                    var placeImage = fixtures.getPlaceImage(),
+                        placeData = fixtures.getPlaceData();
 
                     request(app)
                         .post('/places')
-                        .attach('image', placeImage, 'restaurant.jpg')
-                        .field('place[name]', 'The Awesome Place')
-                        .field('place[address][str]', '6 Awesome St.')
-                        .field('place[address][lat]', '40.46366700000001')
-                        .field('place[address][lng]', '-3.7492200000000366')
-                        .field('place[description]', 'Yeah! it is awesome')
-                        .field('place[telephone]', '666666666')
-                        .field('place[reservations_constrains][capacity]', '1')
-                        .field('place[reservations_constrains][minutes_per_customer]', '60')
+                        .attach('image', placeImage)
+                        .field('place', JSON.stringify(placeData))
                         .expect(200)
                         .end(function(err, res) {
                             if (err) return done(err);
@@ -74,7 +68,11 @@ global.appContainer.resolve(function (UserStore, dbTestUtil, passportStub, TestP
 
                             request(app)
                                 .put('/places/' + placeId)
-                                .send(place)
+                                .attach(
+                                    'image',
+                                    fixtures.getPlaceImage()
+                                )
+                                .field('place', JSON.stringify(place))
                                 .expect(200)
                                 .end(function (err, res) {
                                     if (err) return done(err);
@@ -104,6 +102,21 @@ global.appContainer.resolve(function (UserStore, dbTestUtil, passportStub, TestP
                             });
                     });
                 });
+
+            it('GET /places/<placeId> should return a place', function(done) {
+                fixtures.loadPlaces(function () {
+                    request(app)
+                        .get('/places/' + placeId)
+                        .expect(200)
+                        .end(function (err, res) {
+                            if (err) return done(err);
+                            var realPlace = JSON.parse(res.text);
+                            var expectedPlace = fixtures.getPlaceData();
+                            realPlace.name.should.be.equal(expectedPlace.name);
+                            done();
+                        });
+                });
+            });
         });
     });
 });

@@ -5,24 +5,27 @@ window.angular.module('telemenu.maps').directive('gmap', function () {
         replace: true,
         templateUrl: 'views/gmaps.html',
         link: function(scope, element, attrs, controller) {
-            var geocoder;
-            var map;
+            var geocoder,
+                map,
+                lat = scope.lat || 40.46366700000001,
+                lng = scope.lng || -3.7492200000000366;
 
-            function initialize() {
+            scope.initialize = function () {
                 geocoder = new google.maps.Geocoder();
                 var latlng = new google.maps.LatLng(
-                    40.46366700000001,
-                    -3.7492200000000366
+                    lat,
+                    lng
                     );
                 var mapOptions = {
                     zoom: 4,
                     center: latlng
                 };
                 map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
-            }
+            };
 
-            scope.codeAddress = function() {
-                var address = document.getElementById(attrs.geocodeInput).value;
+            scope.codeAddress = function(address) {
+                address = address || document.getElementById(attrs.geocodeInput).value;
+                console.log(address);
                 if (scope.marker) {
                     scope.marker.setMap(null);
                 }
@@ -41,7 +44,7 @@ window.angular.module('telemenu.maps').directive('gmap', function () {
                 });
             };
 
-            initialize();
+            scope.initialize();
         }
     };
 });

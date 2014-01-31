@@ -29,5 +29,37 @@
                 </div>
             </form>
         </div>
+
+        <div class="form-group">
+                <label for="fromHours" class="col-sm-2 control-label">Horario:</label>
+                <div class="col-sm-10">
+                    <div class="input-group">
+                        <span class="input-group-addon">desde</span>
+                        <input type="time" class="form-control" id="fromHours" required ng-model="place.reservations_constrains.opening_hours[0].from">
+                        <span class="input-group-addon">hasta</span>
+                        <input type="time" class="form-control" id="toHours" required ng-model="place.reservations_constrains.opening_hours[0].to">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="days" class="col-sm-2 control-label">Días:</label>
+                <div class="col-sm-10">
+                    <label for="monday" class="checkbox-inline"><input type="checkbox" class="class" id="monday" value="Mon">
+                    Lunes</label>
+                    <label for="tuesday" class="checkbox-inline"><input type="checkbox" class="class" id="tuesday" value="Tue">
+                    Martes</label>
+                    <label for="wednesday" class="checkbox-inline"><input type="checkbox" class="class" id="wednesday" value="Wed">
+                    Miércoles</label>
+                    <label for="thursday" class="checkbox-inline"><input type="checkbox" class="class" id="thursday" value="Thu">
+                    Jueves</label>
+                    <label for="friday" class="checkbox-inline"><input type="checkbox" class="class" id="friday" value="Fri">
+                    Viernes</label>
+                    <label for="saturday" class="checkbox-inline"><input type="checkbox" class="class" id="saturday" value="Sat">
+                    Sábado</label>
+                    <label for="sunday" class="checkbox-inline"><input type="checkbox" class="class" id="sunday" value="Sun">
+                    Domingo</label>
+                </div>
+            </div>
+        </fieldset>
     </div>
 </section>

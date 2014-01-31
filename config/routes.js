@@ -82,6 +82,7 @@ module.exports = function(app, passport, auth) {
     var places = require('../app/controllers/places');
     app.get('/places', auth.requiresLogin, places.mine);
     app.post('/places', auth.requiresLogin, places.create);
+    app.get('/places/:placeId', places.show);
     app.put('/places/:placeId', auth.requiresLogin, auth.place.hasAuthorization, places.update);
     app.del('/places/:placeId', auth.requiresLogin, auth.place.hasAuthorization, places.destroy);
 

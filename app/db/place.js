@@ -60,6 +60,36 @@ appContainer.resolve(function (mongoose, mongooseAttachments, uploadPath) {
         this.find({user: id}, 'name', cb);
     };
 
+    placeSchema.methods.saveWithImage = function(imagePath, cb) {
+        var that = this;
+
+        function save() {
+            that.save(function (err, savedPlace) {
+                if (err) return cb(err);
+                cb(null, savedPlace);
+            });
+        }
+
+        if (imagePath) {
+            this.attach('image', {path: imagePath }, function (err) {
+                if (err) return cb(err);
+                save();
+            });
+        } else {
+            save();
+        }
+    };
+
+    placeSchema.virtual('detail_img').get(function () {
+        var detailPath = this.image.original.path;
+        return detailPath.slice(detailPath.indexOf('/img/'));
+    });
+
+    placeSchema.virtual('thumb_img').get(function () {
+        var thumbPath = this.image.original.path;
+        return thumbPath.slice(thumbPath.indexOf('/img/'));
+    });
+
 
     var placeModel = mongoose.model('Place', placeSchema);
 
