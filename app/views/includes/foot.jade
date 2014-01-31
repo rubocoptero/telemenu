@@ -39,6 +39,6 @@ script(type='text/javascript', src='/lib/sass-bootstrap/js/alert.js')
 //Google Maps
 script(type='text/javascript', src='https://maps.googleapis.com/maps/api/js?key=AIzaSyBawgs2U-Nnvmi9lpsrAap_pfFacaxdCfM&sensor=true')
 
-if (req.host='localhost')
+if (process.env.NODE_ENV == 'development')
     //Livereload script rendered
     script(type='text/javascript', src='http://localhost:35729/livereload.js')
