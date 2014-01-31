@@ -8,3 +8,5 @@ echo '====================== push staging -> origin ======================'
 git push origin staging
 echo '===================== deploy staging -> heroku ====================='
 git push heroku staging:master
+echo '======================== checkout -> develop ======================='
+git checkout develop
