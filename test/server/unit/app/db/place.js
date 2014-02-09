@@ -6,9 +6,10 @@ global.appContainer.resolve(function (PlaceStore, UserStore, TestPlace, fixtures
             });
 
             it('should create a place with an image', function(done) {
+                var data = TestPlace.getDataWithoutImage(), imagePath = TestPlace.getImage();
                 var place = PlaceStore.createWithImage(
-                    TestPlace.getDataWithoutImage(),
-                    TestPlace.getImage(),
+                    data,
+                    imagePath,
                     function(err) {
                         should.not.exist(err);
                         done();
