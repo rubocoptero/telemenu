@@ -9,7 +9,8 @@ window.app = angular.module('telemenu', [
     'telemenu.menus',
     'telemenu.places',
     'telemenu.maps',
-    'angularFileUpload'
+    'angularFileUpload',
+    'checklist-model'
 ]);
 
 window.angular.module('telemenu.system', []);

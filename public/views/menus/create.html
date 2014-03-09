@@ -1,65 +1,114 @@
-<section data-ng-controller="MenusController">
-    <h3>Menú:</h3>
-    <div class="panel panel-default">
-        <div class="panel-heading">Head</div>
-        <div class="panel-body">
-            <ul class="list-group">
-                <li class="list-group-item">1</li>
-                <li class="list-group-item">2</li>
-                <li class="list-group-item">3</li>
-                <li class="list-group-item">4</li>
-            </ul>
-        </div>
-        <div class="panel-heading">Head</div>
-        <div class="panel-body">
-            <ul class="list-group">
-                <li class="list-group-item">
-                    <form role="form" id="food-form" ng-submit="addFood()">
-                        <div class="form-group">
-                            <input type="text" id="new-food" ng-model="newFood" autofocus placeholder="Nuevo plato..." class="form-control">
-                </div>
-            </form>
-                </li>
-            </ul>
-        </div>
-        <div class="panel-heading">
-            <form role="form" id="section-form" ng-submit="addSection()">
-                <div class="form-group">
-                    <input type="text" id="new-section" ng-model="newSection" autofocus placeholder="Nueva sección..." class="form-control">
-                </div>
-            </form>
-        </div>
-
-        <div class="form-group">
-                <label for="fromHours" class="col-sm-2 control-label">Horario:</label>
+<section data-ng-controller="MenusController" data-ng-init="initMenu(); getPlaces()">
+    <h1>Crear nuevo menú:</h1>
+    <form class="form-horizontal" role="form" autocomplete="on">
+        <fieldset>
+            <div class="form-group">
+                <label for="location" class="col-sm-2 control-label"> Localización: </label>
                 <div class="col-sm-10">
-                    <div class="input-group">
-                        <span class="input-group-addon">desde</span>
-                        <input type="time" class="form-control" id="fromHours" required ng-model="place.reservations_constrains.opening_hours[0].from">
-                        <span class="input-group-addon">hasta</span>
-                        <input type="time" class="form-control" id="toHours" required ng-model="place.reservations_constrains.opening_hours[0].to">
+                    <select class="form-control" ng-show="places.length" ng-cloak ng-model="menu.place" ng-options="place._id as place.name for place in places"></select>
+                    <div ng-hide="places.length" class="alert alert-danger text-center" ng-cloak>
+                        No existen localizaciones.
+                        <a href="#!/localizaciones/crear">
+                            Cree una para continuar.
+                        </a>
                     </div>
                 </div>
             </div>
             <div class="form-group">
+                <label for="menu" class="col-sm-2 control-label">Menú:</label>
+                <div class="col-sm-10">
+                <div class="panel panel-default">
+                    <div class="panel-heading" ng-repeat-start="section in menu.sections">
+                        <h3 class="panel-title">
+                            {{section.name}}
+                            <a ng-click="editSection(section)">
+                                <span class="glyphicon glyphicon-edit"></span>
+                            </a>
+                            <a ng-click="removeSection(section)">
+                                <span class="glyphicon glyphicon-trash"></span>
+                            </a>
+                        </h3>
+                    </div>
+
+                    <div class="panel-body" ng-repeat-end>
+                        <ul class="list-group">
+                            <section ng-show="section.foods.length" ng-cloak>
+                                <li class="list-group-item" ng-repeat="food in section.foods">
+                                    {{food}}
+                                    <a ng-click="editSection(section)">
+                                        <span class="glyphicon glyphicon-edit"></span>
+                                    </a>
+                                    <a ng-click="removeFood(section, food)">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </a>
+                                </li>
+                            </section>
+                           <li class="list-group-item" ng-form="addingfood">
+                                <form role="form" >
+                                    <div class="form-group">
+                                        <div class="input-group col-sm-12">
+                                            <input type="text" ng-model="newFood" autofocus placeholder="Nuevo plato..." class="form-control">
+                                            <span class="input-group-btn">
+                                                <input class="btn btn-default" type="submit" ng-click="addFood(section)" value="Añadir" />
+                                             </span>
+                                        </div>
+                                    </div>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="panel-heading">
+                        <form role="form" id="section-form">
+                            <div class="form-group">
+                                <div class="input-group col-sm-12">
+                                    <input type="text" id="new-section" ng-model="newSection" autofocus placeholder="Nueva sección..." class="form-control">
+                                    <span class="input-group-btn">
+                                        <input class="btn btn-default" type="submit" ng-click="addSection()" value="Añadir" />
+                                    </span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="price" class="col-sm-2 control-label">Precio:</label>
+                <div class="col-sm-10">
+                    <input type="text" ng-model="menu.price" class="form-control" id="price" require>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="fromHours" class="col-sm-2 control-label">Horario:</label>
+                <div class="col-sm-10">
+                    <div class="input-group">
+                        <span class="input-group-addon">desde</span>
+                        <div ng-model="menu.available[0].hours[0].from" ng-change="changed()">
+                            <timepicker hour-step="1" minute-step="15" show-meridian="false"></timepicker>
+                        </div>
+                        <span class="input-group-addon">hasta</span>
+                        <div ng-model="menu.available[0].hours[0].to" ng-change="changed()">
+                            <timepicker hour-step="1" minute-step="15" show-meridian="false"></timepicker>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
                 <label for="days" class="col-sm-2 control-label">Días:</label>
                 <div class="col-sm-10">
-                    <label for="monday" class="checkbox-inline"><input type="checkbox" class="class" id="monday" value="Mon">
-                    Lunes</label>
-                    <label for="tuesday" class="checkbox-inline"><input type="checkbox" class="class" id="tuesday" value="Tue">
-                    Martes</label>
-                    <label for="wednesday" class="checkbox-inline"><input type="checkbox" class="class" id="wednesday" value="Wed">
-                    Miércoles</label>
-                    <label for="thursday" class="checkbox-inline"><input type="checkbox" class="class" id="thursday" value="Thu">
-                    Jueves</label>
-                    <label for="friday" class="checkbox-inline"><input type="checkbox" class="class" id="friday" value="Fri">
-                    Viernes</label>
-                    <label for="saturday" class="checkbox-inline"><input type="checkbox" class="class" id="saturday" value="Sat">
-                    Sábado</label>
-                    <label for="sunday" class="checkbox-inline"><input type="checkbox" class="class" id="sunday" value="Sun">
-                    Domingo</label>
+                    <label ng-repeat="day in days" class="checkbox-inline">
+                        <input type="checkbox" checklist-model="menu.available[0].days" checklist-value="day.id"> {{day.text}}
+                    </label>
                 </div>
             </div>
         </fieldset>
-    </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <input type="submit" class="btn btn-default" ng-click="create()" value="Crear" />
+            </div>
+        </div>
+    </form>
 </section>

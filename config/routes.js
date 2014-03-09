@@ -1,5 +1,6 @@
 var urlHelper = require('../app/helpers/url');
 
+
 module.exports = function(app, passport, auth) {
     //User Routes
     var users = require('../app/controllers/users');

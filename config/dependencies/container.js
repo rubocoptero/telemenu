@@ -27,6 +27,11 @@ container.register('UserStore', function (mongoose) {
 container.register('PlaceStore', function (mongoose) {
     return mongoose.model('Place');
 });
+
+container.register('MenuStore', function (mongoose) {
+    return mongoose.model('Menu');
+});
+
 container.register('VerificationTokenStore', function (mongoose) {
     return mongoose.model('VerificationToken');
 });

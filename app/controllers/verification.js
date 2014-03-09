@@ -35,7 +35,7 @@ exports.resend = function(req, res) {
 
         req.flash('success',
             'Te hemos enviado un correo electrónico con el enlace de verificación.' +
-            'Si no lo encuentras, por favor, asegurate que no está en la carpeta de spam');
+            ' Si no lo encuentras, por favor, asegurate que no está en la carpeta de spam.');
         res.redirect('/');
     });
 };

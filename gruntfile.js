@@ -165,6 +165,9 @@ module.exports = function(grunt) {
     //Default task(s).
     grunt.registerTask('default', ['compass', 'jshint:all', 'concurrent:server']);
 
+    // Server
+    grunt.registerTask('run', ['nodemon:dev']);
+
     //Test task.
     grunt.registerTask('test', ['env:test', 'mochaTest:unit', 'mochaTest:api']);
     grunt.registerTask('test:server:unit', ['env:test', 'mochaTest:unit']);

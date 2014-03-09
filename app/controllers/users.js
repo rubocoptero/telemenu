@@ -55,7 +55,7 @@ appContainer.resolve(function (UserStore, VerificationTokenStore, errorHandler, 
     /**
      * Create user
      */
-    exports.create = function(req, res) {
+    exports.create = function(req, res, next) {
         var user = new UserStore(req.body);
 
         user.provider = 'local';
