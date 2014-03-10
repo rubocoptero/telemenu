@@ -1,12 +1,15 @@
-window.angular.module('telemenu.menus', [])
+window.angular.module('telemenu.menus')
     .controller('MenusController', [
         '$scope',
         '$routeParams',
         '$location',
         'Global',
         'Places',
-        function ($scope, $routeParams, $location, Global, Places) {
+        'Menus',
+        'DateMinutesConversor',
+        function ($scope, $routeParams, $location, Global, Places, Menus, DateMinutesConversor) {
             $scope.global = Global;
+            $scope.submitted = false;
             $scope.newFood = '';
             $scope.newSection = '';
             $scope.menu = {};
@@ -43,7 +46,7 @@ window.angular.module('telemenu.menus', [])
                 });
             };
 
-            $scope.addSection = function () {
+            $scope.addSection = function ($event) {
                 var newSection = $scope.newSection.trim();
 
                 if (!newSection.length) {
@@ -55,9 +58,10 @@ window.angular.module('telemenu.menus', [])
                     foods: []
                 });
                 $scope.newSection = '';
+                $event.preventDefault();
             };
 
-            $scope.addFood = function (section) {
+            $scope.addFood = function ($event, section) {
                 var newFood = this.newFood.trim();
 
                 if (!newFood.length) {
@@ -66,6 +70,7 @@ window.angular.module('telemenu.menus', [])
 
                 section.foods.push(newFood);
                 this.newFood = '';
+                $event.preventDefault();
             };
 
             $scope.removeSection = function (section) {
@@ -84,17 +89,26 @@ window.angular.module('telemenu.menus', [])
                 );
             };
 
-            $scope.create = function() {
+            $scope.create = function(isValid) {
                 console.log($scope.menu);
-                // var menu = new Menus({
-                //     // TODO stuff
-                // });
+                $scope.submitted = true;
 
-                // menu.$save(function (response) {
-                //     $location.path('menus/' + response._id);
-                // });
+                if (isValid) {
+                    var menu = new Menus(
+                        $scope.menu
+                    );
 
-                // Clear form HERE!
+                    menu.available[0].hours[0].from = DateMinutesConversor.toMinutes(
+                            $scope.menu.available[0].hours[0].from);
+                    menu.available[0].hours[0].to = DateMinutesConversor.toMinutes(
+                            $scope.menu.available[0].hours[0].to);
+
+                    menu.$save(function (response) {
+                        $location.path('');
+                    });
+
+                    $scope.initMenu();
+                }
             };
         }
     ]);

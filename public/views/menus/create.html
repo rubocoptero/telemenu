@@ -1,11 +1,15 @@
 <section data-ng-controller="MenusController" data-ng-init="initMenu(); getPlaces()">
     <h1>Crear nuevo menú:</h1>
-    <form class="form-horizontal" role="form" autocomplete="on">
+    <form id="menuForm" name="menuForm" class="form-horizontal" role="form" autocomplete="on" data-ng-submit="create(menuForm.$valid)" novalidate>
         <fieldset>
-            <div class="form-group">
+            <div class="form-group" ng-class="{ 'has-error' : menuForm.place.$invalid && (!menuForm.place.$pristine || submitted ) }">
                 <label for="location" class="col-sm-2 control-label"> Localización: </label>
                 <div class="col-sm-10">
-                    <select class="form-control" ng-show="places.length" ng-cloak ng-model="menu.place" ng-options="place._id as place.name for place in places"></select>
+                    <span ng-show="places.length" ng-cloak>
+                        <select class="form-control" name="place"  ng-model="menu.place" ng-options="place._id as place.name for place in places" required></select>
+                        <p class="help-block" ng-show="menuForm.place.$invalid && ( !menuForm.place.$pristine || submitted )">Requerido.</p>
+                    </span>
+
                     <div ng-hide="places.length" class="alert alert-danger text-center" ng-cloak>
                         No existen localizaciones.
                         <a href="#!/localizaciones/crear">
@@ -43,40 +47,38 @@
                                     </a>
                                 </li>
                             </section>
-                           <li class="list-group-item" ng-form="addingfood">
-                                <form role="form" >
-                                    <div class="form-group">
-                                        <div class="input-group col-sm-12">
-                                            <input type="text" ng-model="newFood" autofocus placeholder="Nuevo plato..." class="form-control">
-                                            <span class="input-group-btn">
-                                                <input class="btn btn-default" type="submit" ng-click="addFood(section)" value="Añadir" />
-                                             </span>
-                                        </div>
+                           <li class="list-group-item">
+                                <div class="form-group">
+                                    <div class="input-group col-sm-12">
+                                        <input type="text" ng-model="newFood" placeholder="Nuevo plato..." class="form-control" ui-keypress="{13:'addFood($event, section)'}">
+                                        <span class="input-group-btn">
+                                            <button class="btn btn-default" ng-click="addFood($event, section)">Añadir</button>
+                                         </span>
                                     </div>
-                                </form>
+                                </div>
                             </li>
                         </ul>
                     </div>
                     <div class="panel-heading">
-                        <form role="form" id="section-form">
-                            <div class="form-group">
-                                <div class="input-group col-sm-12">
-                                    <input type="text" id="new-section" ng-model="newSection" autofocus placeholder="Nueva sección..." class="form-control">
-                                    <span class="input-group-btn">
-                                        <input class="btn btn-default" type="submit" ng-click="addSection()" value="Añadir" />
-                                    </span>
-                                </div>
+                        <div class="form-group" ng-class="{ 'has-error' : menuForm.newSection.$invalid && ( !menuForm.newSection.$pristine || submitted ) }">
+                            <div class="input-group col-sm-12">
+                                <input type="text" id="new-section" name="newSection" ng-model="newSection" placeholder="Nueva sección..." class="form-control" ui-keypress="{13:'addSection($event)'}" ng-required="menu.sections.length == 0">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" ng-click="addSection($event)">Añadir</button>
+                                </span>
                             </div>
-                        </form>
+                            <p ng-show="menuForm.newSection.$invalid && ( !menuForm.newSection.$pristine || submitted )" class="col-sm-12 help-block">Al menos el menú debe contener una sección.</p>
+                        </div>
                     </div>
                 </div>
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" ng-class="{ 'has-error' : menuForm.price.$invalid && ( !menuForm.price.$pristine || submitted ) }">
                 <label for="price" class="col-sm-2 control-label">Precio:</label>
                 <div class="col-sm-10">
-                    <input type="text" ng-model="menu.price" class="form-control" id="price" require>
+                    <input type="text" ng-model="menu.price" class="form-control" id="price" name="price" required>
+                    <p ng-show="menuForm.price.$invalid && ( !menuForm.price.$pristine || submitted )" class="help-block">Requerido.</p>
                 </div>
             </div>
 
@@ -96,18 +98,19 @@
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" ng-class="{ 'has-error' : menuForm.days.$invalid && ( !menuForm.days.$pristine || submitted ) }">
                 <label for="days" class="col-sm-2 control-label">Días:</label>
                 <div class="col-sm-10">
                     <label ng-repeat="day in days" class="checkbox-inline">
-                        <input type="checkbox" checklist-model="menu.available[0].days" checklist-value="day.id"> {{day.text}}
+                        <input name="days" type="checkbox" checklist-model="menu.available[0].days" checklist-value="day.id" ng-required="menu.available[0].days.length == 0"> {{day.text}}
                     </label>
+                    <p ng-show="menuForm.days.$invalid && ( !menuForm.days.$pristine || submitted )" class="help-block">Al menos debe seleccionar un día a la semana.</p>
                 </div>
             </div>
         </fieldset>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
-                <input type="submit" class="btn btn-default" ng-click="create()" value="Crear" />
+                <input type="submit" class="btn btn-default pull-right" value="Crear" ng-disabled="!places.length" />
             </div>
         </div>
     </form>

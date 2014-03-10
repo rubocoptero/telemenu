@@ -4,6 +4,8 @@ window.app = angular.module('telemenu', [
     'ngRoute',
     'ui.bootstrap',
     'ui.route',
+    'ui.keypress',
+    'ui.validate',
     'telemenu.system',
     'telemenu.articles',
     'telemenu.menus',

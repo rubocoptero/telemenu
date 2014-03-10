@@ -5,7 +5,9 @@ appContainer.resolve(function (MenuStore, _) {
         var menu = new MenuStore(req.body);
         menu.user = req.user;
         // fill stuff
+        console.log(menu);
         menu.save();
+        console.log(menu);
         res.jsonp(menu);
     };
 

@@ -103,7 +103,7 @@ module.exports = function(app, passport, auth) {
     // Menu Routes
     var menus = require('../app/controllers/menus');
     app.get('/menus', menus.all);
-    app.post('menus', auth.requiresLogin, menus.create);
+    app.post('/menus', auth.requiresLogin, menus.create);
     app.get('/menus/:menuId', menus.show);
     app.put('/menus/:menuId', auth.requiresLogin, menus.update);
     app.del('/menus/:menuId', auth.requiresLogin, menus.destroy);

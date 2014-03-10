@@ -1,4 +1,4 @@
-window.angular.module('telemenu.menus', [])
+window.angular.module('telemenu.menus')
     .factory('Menus', ['$resource',
         function($resource) {
             return $resource(
@@ -7,7 +7,9 @@ window.angular.module('telemenu.menus', [])
                     menuId: '@_id'
                 },
                 {
-                    update: {method: 'PUT'}
+                    update: {
+                        method: 'PUT'
+                    }
                 }
             );
         }]);
