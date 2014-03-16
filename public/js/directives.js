@@ -25,7 +25,6 @@ window.angular.module('telemenu.maps').directive('gmap', function () {
 
             scope.codeAddress = function(address) {
                 address = address || document.getElementById(attrs.geocodeInput).value;
-                console.log(address);
                 if (scope.marker) {
                     scope.marker.setMap(null);
                 }
