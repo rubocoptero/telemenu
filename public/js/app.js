@@ -12,7 +12,8 @@ window.app = angular.module('telemenu', [
     'telemenu.places',
     'telemenu.maps',
     'angularFileUpload',
-    'checklist-model'
+    'checklist-model',
+    'xeditable'
 ]);
 
 window.angular.module('telemenu.system', []);
@@ -20,3 +21,7 @@ window.angular.module('telemenu.articles', []);
 window.angular.module('telemenu.places', []);
 window.angular.module('telemenu.menus', []);
 window.angular.module('telemenu.maps', []);
+
+window.app.run(function(editableOptions) {
+    editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
+});

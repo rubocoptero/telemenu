@@ -19,7 +19,16 @@ appContainer.resolve(function (mongoose, mongooseAttachments, uploadPath) {
             },
             minutes_per_customer: { type: Number, required: true }
         },
-        feedback: {type: mongoose.Schema.ObjectId, ref: 'Feedback'}
+        feedback: {
+            type: mongoose.Schema.ObjectId,
+            ref: 'Feedback'
+        },
+        category: {
+            type: String,
+            enum: [ 'Private', 'Professional'],
+            default: 'Private',
+            required: true
+        }
     });
 
     placeSchema.plugin(mongooseAttachments, {

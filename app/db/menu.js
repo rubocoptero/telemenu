@@ -1,31 +1,42 @@
 var appContainer = require('../../config/dependencies/container');
 
 appContainer.resolve(function (mongoose) {
-   var Schema = mongoose.Schema;
+    var Schema = mongoose.Schema;
 
     var menuSchema = new Schema({
         user: {
             type: Schema.ObjectId,
-            ref: 'User'
+            ref: 'User',
+            required: true
         },
         place: {
             type: Schema.ObjectId,
-            ref: 'Place'
+            ref: 'Place',
+            required: true
         },
-        price: {type:Number, min:0},
-        sections: [{
-            name: String,
-            foods: [String]
-        }],
-        available: [{
-            days: [{
-                type: String,
-                enum: [ 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' ],
+        price: {type:Number, min:0, required: true},
+        sections: {
+            type: [{
+                name: { type: String, required: true },
+                foods: {type: [String], required: true}
             }],
-            hours: [{
-                from: {type: Number, min: 0, max: 1440, required: true},
-                to: {type: Number, min: 0, max: 1440, required: true}
-            }]
+            required: true
+        },
+        available: [{
+            days: {
+                type: [{
+                    type: String,
+                    enum: [ 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday' ]
+                }],
+                required: true
+            },
+            hours: {
+                type: [{
+                    from: {type: Number, min: 0, max: 1440, required: true},
+                    to: {type: Number, min: 0, max: 1440, required: true}
+                }],
+                required: true
+            }
         }]
     });
 

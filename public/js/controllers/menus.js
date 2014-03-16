@@ -23,6 +23,10 @@ window.angular.module('telemenu.menus')
                 {id: 'Saturday', text: 'Sábado'},
                 {id: 'Sunday', text: 'Domingo'}
             ];
+            $scope.invalid = {
+                sections: true,
+                food: true
+            };
 
             $scope.initMenu = function () {
                 $scope.menu = {
@@ -31,11 +35,31 @@ window.angular.module('telemenu.menus')
                         days: [],
                         hours: [{
                             from: new Date(),
-                            to: new Date()
+                            to: new Date(new Date().setHours(new Date().getHours()+1))
                         }]
                     }]
                 };
             };
+
+            $scope.isMenuValid = function () {
+                if ($scope.menu.sections && $scope.menu.sections.length > 0) {
+                    $scope.invalid.sections = false;
+                    $scope.invalid.food = false;
+                    for (var i = 0; i < $scope.menu.sections.length; i++) {
+                        if ($scope.menu.sections[i].foods.length < 1 ) {
+                            $scope.invalid.food = true;
+                            return false;
+                        }
+                    }
+                } else {
+                    $scope.invalid.sections = true;
+                    return false;
+                }
+
+                return true;
+            };
+
+            $scope.$watch('menu.sections', $scope.isMenuValid, true);
 
             $scope.getPlaces = function () {
                 Places.mine().success(function (data) {
@@ -74,14 +98,14 @@ window.angular.module('telemenu.menus')
             };
 
             $scope.removeSection = function (section) {
-                $scope.sections.splice(
-                    $scope.sections.indexOf(section),
+                $scope.menu.sections.splice(
+                    $scope.menu.sections.indexOf(section),
                     1
                 );
             };
 
             $scope.removeFood = function (section, food) {
-                var array = $scope.sections[$scope.sections.indexOf(section)].foods;
+                var array = $scope.menu.sections[$scope.menu.sections.indexOf(section)].foods;
 
                 array.splice(
                     array.indexOf(food),
@@ -93,7 +117,7 @@ window.angular.module('telemenu.menus')
                 console.log($scope.menu);
                 $scope.submitted = true;
 
-                if (isValid) {
+                if ($scope.isMenuValid() && isValid) {
                     var menu = new Menus(
                         $scope.menu
                     );

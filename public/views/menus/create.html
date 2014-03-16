@@ -1,6 +1,6 @@
 <section data-ng-controller="MenusController" data-ng-init="initMenu(); getPlaces()">
     <h1>Crear nuevo menú:</h1>
-    <form id="menuForm" name="menuForm" class="form-horizontal" role="form" autocomplete="on" data-ng-submit="create(menuForm.$valid)" novalidate>
+    <form id="menuForm" name="menuForm" class="form-horizontal" role="form" autocomplete="on" data-ng-submit="create(menuForm.$valid)" novalidate editable-form>
         <fieldset>
             <div class="form-group" ng-class="{ 'has-error' : menuForm.place.$invalid && (!menuForm.place.$pristine || submitted ) }">
                 <label for="location" class="col-sm-2 control-label"> Localización: </label>
@@ -18,19 +18,21 @@
                     </div>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" ng-class="{ 'has-error' : (invalid.sections || invalid.food) && submitted }">
                 <label for="menu" class="col-sm-2 control-label">Menú:</label>
                 <div class="col-sm-10">
                 <div class="panel panel-default">
                     <div class="panel-heading" ng-repeat-start="section in menu.sections">
                         <h3 class="panel-title">
                             {{section.name}}
-                            <a ng-click="editSection(section)">
-                                <span class="glyphicon glyphicon-edit"></span>
-                            </a>
-                            <a ng-click="removeSection(section)">
-                                <span class="glyphicon glyphicon-trash"></span>
-                            </a>
+                            <span class="pull-right">
+                                <a ng-click="editSection(section)">
+                                    <span class="glyphicon glyphicon-edit"></span>
+                                </a>
+                                <a ng-click="removeSection(section)">
+                                    <span class="glyphicon glyphicon-trash"></span>
+                                </a>
+                            </span>
                         </h3>
                     </div>
 
@@ -39,12 +41,14 @@
                             <section ng-show="section.foods.length" ng-cloak>
                                 <li class="list-group-item" ng-repeat="food in section.foods">
                                     {{food}}
-                                    <a ng-click="editSection(section)">
-                                        <span class="glyphicon glyphicon-edit"></span>
-                                    </a>
-                                    <a ng-click="removeFood(section, food)">
-                                        <span class="glyphicon glyphicon-trash"></span>
-                                    </a>
+                                    <span class="pull-right">
+                                        <a ng-click="editSection(section)">
+                                            <span class="glyphicon glyphicon-edit"></span>
+                                        </a>
+                                        <a ng-click="removeFood(section, food)">
+                                            <span class="glyphicon glyphicon-trash"></span>
+                                        </a>
+                                    </span>
                                 </li>
                             </section>
                            <li class="list-group-item">
@@ -67,32 +71,36 @@
                                     <button class="btn btn-default" ng-click="addSection($event)">Añadir</button>
                                 </span>
                             </div>
-                            <p ng-show="menuForm.newSection.$invalid && ( !menuForm.newSection.$pristine || submitted )" class="col-sm-12 help-block">Al menos el menú debe contener una sección.</p>
                         </div>
                     </div>
                 </div>
+                <p ng-show="invalid.sections && submitted" class="col-sm-12 help-block">Al menos el menú debe contener una sección.</p>
+                <p ng-show="invalid.food && submitted" class="col-sm-12 help-block">Cada sección de menú debe contener al menos un plato.</p>
                 </div>
             </div>
 
             <div class="form-group" ng-class="{ 'has-error' : menuForm.price.$invalid && ( !menuForm.price.$pristine || submitted ) }">
                 <label for="price" class="col-sm-2 control-label">Precio:</label>
                 <div class="col-sm-10">
-                    <input type="text" ng-model="menu.price" class="form-control" id="price" name="price" required>
-                    <p ng-show="menuForm.price.$invalid && ( !menuForm.price.$pristine || submitted )" class="help-block">Requerido.</p>
+                    <input type="number" ng-model="menu.price" class="form-control" id="price" name="price" min="0" required>
+                    <p ng-show="menuForm.price.$error.required && ( !menuForm.price.$pristine || submitted )" class="help-block">Requerido.</p>
+                    <p ng-show="menuForm.price.$error.number && ( !menuForm.price.$pristine || submitted )" class="help-block">Debe ser un número.</p>
                 </div>
             </div>
 
             <div class="form-group">
                 <label for="fromHours" class="col-sm-2 control-label">Horario:</label>
                 <div class="col-sm-10">
-                    <div class="input-group">
+                    <div class="input-group col-sm-6" style="padding-left: 0">
                         <span class="input-group-addon">desde</span>
-                        <div ng-model="menu.available[0].hours[0].from" ng-change="changed()">
-                            <timepicker hour-step="1" minute-step="15" show-meridian="false"></timepicker>
+                        <div class="form-control" ng-model="menu.available[0].hours[0].from" ng-change="changed()">
+                            <timepicker class="center-block" hour-step="1" minute-step="15" show-meridian="false"></timepicker>
                         </div>
+                    </div>
+                    <div class="input-group col-sm-6" style="padding-right: 0">
                         <span class="input-group-addon">hasta</span>
-                        <div ng-model="menu.available[0].hours[0].to" ng-change="changed()">
-                            <timepicker hour-step="1" minute-step="15" show-meridian="false"></timepicker>
+                        <div class="form-control" ng-model="menu.available[0].hours[0].to" ng-change="changed()">
+                            <timepicker class="center-block" hour-step="1" minute-step="15" show-meridian="false"></timepicker>
                         </div>
                     </div>
                 </div>

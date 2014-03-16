@@ -3,7 +3,8 @@ global.appContainer.resolve(function (MenuStore, PlaceStore, fixtures, mongoose)
         describe('Model Menu:', function () {
             it('should save itself', function (done) {
                 var menuData = {
-                    place: mongoose.Schema.ObjectId(),
+                    user: new mongoose.Types.ObjectId(),
+                    place: new mongoose.Types.ObjectId(),
                     price: 10.50,
                     sections: [
                         {
@@ -22,7 +23,7 @@ global.appContainer.resolve(function (MenuStore, PlaceStore, fixtures, mongoose)
                         }
                     ],
                     available: [{
-                        days: ['Sat', 'Sun'],
+                        days: ['Saturday', 'Sunday'],
                         hours: [{
                             from: 720,
                             to: 940
@@ -34,6 +35,67 @@ global.appContainer.resolve(function (MenuStore, PlaceStore, fixtures, mongoose)
                 menu.save(function (err, saved) {
                     should.not.exist(err);
                     saved.price.should.be.equal(10.5);
+                    done(err);
+                });
+            });
+
+            it('should throw an error when there is no sections', function (done) {
+                var menuData = {
+                    user: new mongoose.Types.ObjectId(),
+                    place: new mongoose.Types.ObjectId(),
+                    price: 10.50,
+                    sections: [],
+                    available: [{
+                        days: ['Saturday', 'Sunday'],
+                        hours: [{
+                            from: 720,
+                            to: 940
+                        }]
+                    }]
+                };
+
+                var menu = new MenuStore(menuData);
+                menu.save(function (err, saved) {
+                    should.exist(err);
+                    err.should.have.deep.property('errors.sections.path', 'sections');
+                    err.should.have.deep.property('errors.sections.type', 'required');
+                    done();
+                });
+            });
+
+            it('should throw an error when there is no food in a section', function (done) {
+                var menuData = {
+                    user: new mongoose.Types.ObjectId(),
+                    place: new mongoose.Types.ObjectId(),
+                    price: 10.50,
+                    sections: [
+                        {
+                            name: 'Main dish',
+                            foods: [
+                                'Meat',
+                                'Fish'
+                            ]
+                        },
+                        {
+                            name: 'Dessert',
+                            foods: []
+                        }
+
+                    ],
+                    available: [{
+                        days: ['Saturday', 'Sunday'],
+                        hours: [{
+                            from: 720,
+                            to: 940
+                        }]
+                    }]
+                };
+
+                var menu = new MenuStore(menuData);
+                menu.save(function (err, saved) {
+                    should.exist(err);
+                    err.errors['sections.1.foods'].path.should.be.equal('foods');
+                    err.errors['sections.1.foods'].type.should.be.equal('required');
                     done();
                 });
             });

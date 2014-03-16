@@ -59,7 +59,6 @@ global.appContainer.resolve(function (PlaceStore, UserStore, TestPlace, fixtures
                             null,
                             function (err, savedPlace) {
                                 should.not.exist(err);
-                                console.log(savedPlace);
                                 savedPlace.address.lng.should.be.equal(newLng);
                                 done();
                             });

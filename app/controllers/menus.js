@@ -4,10 +4,7 @@ appContainer.resolve(function (MenuStore, _) {
     exports.create = function (req, res) {
         var menu = new MenuStore(req.body);
         menu.user = req.user;
-        // fill stuff
-        console.log(menu);
         menu.save();
-        console.log(menu);
         res.jsonp(menu);
     };
 
