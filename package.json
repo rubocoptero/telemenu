@@ -18,7 +18,7 @@
     "postinstall": "./node_modules/.bin/bower install"
   },
   "dependencies": {
-    "express": "latest",
+    "express": "~3.4.8",
     "jade": "latest",
     "mongoose": "latest",
     "connect-mongo": "latest",
