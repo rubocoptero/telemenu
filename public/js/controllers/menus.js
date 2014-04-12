@@ -7,7 +7,9 @@ window.angular.module('telemenu.menus')
         'Places',
         'Menus',
         'DateMinutesConversor',
-        function ($scope, $routeParams, $location, Global, Places, Menus, DateMinutesConversor) {
+        '$modal',
+        '$log',
+        function ($scope, $routeParams, $location, Global, Places, Menus, DateMinutesConversor, $modal, $log) {
             $scope.global = Global;
             $scope.submitted = false;
             $scope.newFood = '';
@@ -134,6 +136,68 @@ window.angular.module('telemenu.menus')
                     $scope.initMenu();
                 }
             };
+
+            $scope.modalRemoveSection = function (target, section) {
+
+                var modalInstance = $modal.open({
+                    templateUrl: 'views/bootstrap/remove-modal.html',
+                    controller: function ($scope, $modalInstance, target) {
+
+                        $scope.target = target;
+
+                        $scope.ok = function () {
+                            $modalInstance.close(true);
+                        };
+
+                        $scope.cancel = function () {
+                            $modalInstance.dismiss('cancel');
+                        };
+                    },
+                    resolve: {
+                        target: function () {
+                            return target;
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function () {
+                    $scope.removeSection(section);
+                }, function () {
+                    $log.info('Modal dismissed at: ' + new Date());
+                });
+            };
+
+            $scope.modalRemoveFood = function (target, section, food) {
+
+                var modalInstance = $modal.open({
+                    templateUrl: 'views/bootstrap/remove-modal.html',
+                    controller: function ($scope, $modalInstance, target) {
+
+                        $scope.target = target;
+
+                        $scope.ok = function () {
+                            $modalInstance.close(true);
+                        };
+
+                        $scope.cancel = function () {
+                            $modalInstance.dismiss('cancel');
+                        };
+                    },
+                    resolve: {
+                        target: function () {
+                            return target;
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function () {
+                    $scope.removeFood(section, food);
+                }, function () {
+                    $log.info('Modal dismissed at: ' + new Date());
+                });
+            };
+
+
         }
     ]);
 

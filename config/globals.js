@@ -9,7 +9,7 @@ var getMailTransport = function() {
             {
                 service: 'gmail',
                 auth: {
-                    user: process.env.EMAIL_USER || 'rubendetelemenu@gmail.com',
+                    user: process.env.EMAIL_USER || 'rubodetelemenu@gmail.com',
                     pass: process.env.EMAIL_PASS || 'password'
                 },
                 debug: process.env.DEBUG_MAILER ||

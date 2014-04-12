@@ -6,7 +6,8 @@ window.angular.module('telemenu.places')
         'Global',
         'Places',
         '$modal',
-        function ($scope, $routeParams, $location, Global, Places, $modal) {
+        '$log',
+        function ($scope, $routeParams, $location, Global, Places, $modal, $log) {
             $scope.global = Global;
             $scope.image = null;
 
@@ -16,8 +17,8 @@ window.angular.module('telemenu.places')
 
             var setLatLng = function () {
                 if ($scope.marker) {
-                    $scope.place.address.lat = $scope.marker.position.d;
-                    $scope.place.address.lng = $scope.marker.position.e;
+                    $scope.place.address.lat = $scope.marker.position.A;
+                    $scope.place.address.lng = $scope.marker.position.k;
                 } else {
                     console.log('Error: marker is undefined');
                 }
@@ -40,16 +41,19 @@ window.angular.module('telemenu.places')
             };
 
             $scope.create = function() {
-                setLatLng();
-                Places.create(
-                    $scope.place,
-                    $scope.image
-                ).success(function (data) {
-                    $location.path('localizaciones');
-                }).error(function (data) {
-                    console.log('Error:');
-                    console.log(data);
-                });
+                $scope.submitted = true;
+                if ($scope.placeForm.$valid) {
+                    setLatLng();
+                    Places.create(
+                        $scope.place,
+                        $scope.image
+                    ).success(function (data) {
+                        $location.path('localizaciones');
+                    }).error(function (data) {
+                        console.log('Error:');
+                        console.log(data);
+                    });
+                }
             };
 
             $scope.mine = function() {
@@ -62,6 +66,7 @@ window.angular.module('telemenu.places')
             };
 
             $scope.update = function() {
+                $scope.submitted = true;
                 setLatLng();
                 Places.update(
                     $routeParams.placeId,
@@ -79,6 +84,7 @@ window.angular.module('telemenu.places')
                 Places.findOne(
                     $routeParams.placeId
                 ).success(function (data) {
+                    console.log(data);
                     $scope.place = data;
                     $scope.currentImage = srcImage(data.image.original.path);
                     $scope.codeAddress(data.address.str);
@@ -96,6 +102,36 @@ window.angular.module('telemenu.places')
                 }).error(function (data) {
                     console.log('Error:');
                     console.log(data);
+                });
+            };
+
+            $scope.modalRemove = function (target, id) {
+
+                var modalInstance = $modal.open({
+                    templateUrl: 'views/bootstrap/remove-modal.html',
+                    controller: function ($scope, $modalInstance, target) {
+
+                        $scope.target = target;
+
+                        $scope.ok = function () {
+                            $modalInstance.close(true);
+                        };
+
+                        $scope.cancel = function () {
+                            $modalInstance.dismiss('cancel');
+                        };
+                    },
+                    resolve: {
+                        target: function () {
+                            return target;
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function (selectedItem) {
+                    $scope.remove(id);
+                }, function () {
+                    $log.info('Modal dismissed at: ' + new Date());
                 });
             };
         }

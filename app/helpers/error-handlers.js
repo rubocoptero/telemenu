@@ -8,6 +8,24 @@ var getDuplicationErrorMessage = function(err) {
     return duplicatedValue + ' ya existe';
 };
 
+var getValidationErrorMessage = function (err) {
+    var messages = [];
+
+    for (var error in err.errors) {
+        messages.push(err.errors[error].message);
+    }
+
+    return messages.join('\n');
+};
+
 exports.forMongoose = function(err) {
-    return getDuplicationErrorMessage(err);
+    var message;
+    console.log(err);
+    if (err.name === 'ValidationError') {
+        message = getValidationErrorMessage(err);
+    } else if (err.name === 'MongoError') {
+        message = getDuplicationErrorMessage(err);
+    }
+    console.log('Message: ' + message);
+    return message;
 };

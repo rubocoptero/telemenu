@@ -29,7 +29,7 @@
                                 <a ng-click="editSection(section)">
                                     <span class="glyphicon glyphicon-edit"></span>
                                 </a>
-                                <a ng-click="removeSection(section)">
+                                <a ng-click="modalRemoveSection(section.name, section)">
                                     <span class="glyphicon glyphicon-trash"></span>
                                 </a>
                             </span>
@@ -45,7 +45,7 @@
                                         <a ng-click="editSection(section)">
                                             <span class="glyphicon glyphicon-edit"></span>
                                         </a>
-                                        <a ng-click="removeFood(section, food)">
+                                        <a ng-click="modalRemoveFood(food, section, food)">
                                             <span class="glyphicon glyphicon-trash"></span>
                                         </a>
                                     </span>
