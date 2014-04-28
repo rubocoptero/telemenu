@@ -106,6 +106,13 @@ window.angular.module('telemenu.menus')
                 );
             };
 
+            $scope.editSection = function (section, newName) {
+                if (newName) {
+                    var indexSection = $scope.menu.sections.indexOf(section);
+                    $scope.menu.sections[indexSection].name = newName;
+                }
+            };
+
             $scope.removeFood = function (section, food) {
                 var array = $scope.menu.sections[$scope.menu.sections.indexOf(section)].foods;
 
@@ -113,6 +120,13 @@ window.angular.module('telemenu.menus')
                     array.indexOf(food),
                     1
                 );
+            };
+
+            $scope.editFood = function (section, food, newName) {
+                if (newName) {
+                    var foods = $scope.menu.sections[$scope.menu.sections.indexOf(section)].foods;
+                    foods[foods.indexOf(food)] = newName;
+                }
             };
 
             $scope.create = function(isValid) {
@@ -192,6 +206,65 @@ window.angular.module('telemenu.menus')
 
                 modalInstance.result.then(function () {
                     $scope.removeFood(section, food);
+                }, function () {
+                    $log.info('Modal dismissed at: ' + new Date());
+                });
+            };
+
+            $scope.modalEditFood = function (target, section, food) {
+
+                var modalInstance = $modal.open({
+                    templateUrl: 'views/bootstrap/edit-modal.html',
+                    controller: function ($scope, $modalInstance, target) {
+                        $scope.target = target;
+
+                        $scope.ok = function () {
+                            $modalInstance.close($scope.$$childTail.newName);
+                        };
+
+                        $scope.cancel = function () {
+                            $modalInstance.dismiss('cancel');
+                        };
+                    },
+                    resolve: {
+                        target: function () {
+                            return target;
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function (newName) {
+                    $scope.editFood(section, food, newName);
+                }, function () {
+                    $log.info('Modal dismissed at: ' + new Date());
+                });
+            };
+
+
+            $scope.modalEditSection = function (target, section) {
+
+                var modalInstance = $modal.open({
+                    templateUrl: 'views/bootstrap/edit-modal.html',
+                    controller: function ($scope, $modalInstance, target) {
+                        $scope.target = target;
+
+                        $scope.ok = function () {
+                            $modalInstance.close($scope.$$childTail.newName);
+                        };
+
+                        $scope.cancel = function () {
+                            $modalInstance.dismiss('cancel');
+                        };
+                    },
+                    resolve: {
+                        target: function () {
+                            return target;
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function (newName) {
+                    $scope.editSection(section, newName);
                 }, function () {
                     $log.info('Modal dismissed at: ' + new Date());
                 });

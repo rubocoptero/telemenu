@@ -26,7 +26,7 @@
                         <h3 class="panel-title">
                             {{section.name}}
                             <span class="pull-right">
-                                <a ng-click="editSection(section)">
+                                <a ng-click="modalEditSection(section.name, section)">
                                     <span class="glyphicon glyphicon-edit"></span>
                                 </a>
                                 <a ng-click="modalRemoveSection(section.name, section)">
@@ -42,7 +42,7 @@
                                 <li class="list-group-item" ng-repeat="food in section.foods">
                                     {{food}}
                                     <span class="pull-right">
-                                        <a ng-click="editSection(section)">
+                                        <a ng-click="modalEditFood(food, section, food)">
                                             <span class="glyphicon glyphicon-edit"></span>
                                         </a>
                                         <a ng-click="modalRemoveFood(food, section, food)">
