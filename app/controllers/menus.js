@@ -22,7 +22,7 @@ appContainer.resolve(function (MenuStore, _) {
     };
 
     exports.all = function(req, res) {
-        MenuStore.find().populate('user').exec(function(err, menus) {
+        MenuStore.find(req.query).populate('user').exec(function(err, menus) {
             if (err) {
                 res.render('error', {status: 500});
             } else {

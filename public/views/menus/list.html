@@ -1,0 +1,19 @@
+<section data-ng-controller="MenusController" data-ng-init="mine()">
+    <h1>Mis menús</h1>
+    <ul>
+        <li data-ng-repeat="menu in menus">
+            <h3>
+                {{ menu.sections }}
+                <a data-ng-href="#!/menus/{{menu._id}}/editar">
+                    <span class="glyphicon glyphicon-edit"></span>
+                </a>
+                <a ng-click="modalRemove(menu.name, menu._id)">
+                    <span class="glyphicon glyphicon-trash"></span>
+                </a>
+            </h3>
+        </li>
+    </ul>
+    <div class="text-right">
+        <a href="#!/menus/crear">Crear nuevo menú</a>
+    </div>
+</section>

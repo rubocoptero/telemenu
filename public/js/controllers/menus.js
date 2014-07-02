@@ -30,6 +30,10 @@ window.angular.module('telemenu.menus')
                 food: true
             };
 
+            var srcImage = function (path) {
+                return path.slice(path.indexOf('/img/'));
+            };
+
             $scope.initMenu = function () {
                 $scope.menu = {
                     sections: [],
@@ -130,7 +134,6 @@ window.angular.module('telemenu.menus')
             };
 
             $scope.create = function(isValid) {
-                console.log($scope.menu);
                 $scope.submitted = true;
 
                 if ($scope.isMenuValid() && isValid) {
@@ -144,11 +147,45 @@ window.angular.module('telemenu.menus')
                             $scope.menu.available[0].hours[0].to);
 
                     menu.$save(function (response) {
-                        $location.path('');
+                        $location.path('menus/' + response._id);
                     });
 
                     $scope.initMenu();
                 }
+            };
+
+            $scope.mine = function () {
+                Menus.query({user: Global.user._id}, function (menus) {
+                    $scope.menus = menus;
+                });
+            };
+
+            $scope.update = function(isValid) {
+                if ($scope.isMenuValid() && isValid) {
+                    var menu = $scope.menu;
+                    menu.available[0].hours[0].from = DateMinutesConversor.toMinutes(
+                            $scope.menu.available[0].hours[0].from);
+                    menu.available[0].hours[0].to = DateMinutesConversor.toMinutes(
+                            $scope.menu.available[0].hours[0].to);
+
+                    menu.$update(function () {
+                        $location.path('menus/' + menu._id);
+                    });
+                }
+            };
+
+            $scope.findOne = function () {
+                Menus.get({menuId: $routeParams.menuId}, function (menu) {
+                    $scope.menu = menu;
+                    $scope.menu.available[0].hours[0].from = DateMinutesConversor.toDate(
+                            menu.available[0].hours[0].from);
+                    $scope.menu.available[0].hours[0].to = DateMinutesConversor.toDate(
+                            menu.available[0].hours[0].to);
+                    $scope.place = menu.place;
+                    $scope.menu.place = menu.place._id;
+                    $scope.currentImage = srcImage($scope.place.image.original.path);
+                    $scope.codeAddress($scope.place.address.str);
+                });
             };
 
             $scope.modalRemoveSection = function (target, section) {

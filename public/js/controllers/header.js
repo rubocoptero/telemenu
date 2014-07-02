@@ -3,17 +3,15 @@ angular.module('telemenu.system').controller('HeaderController', ['$scope', 'Glo
 
     $scope.menu = [
         {
-            'title': 'Crear nuevo Menú',
-            'link': 'menus/create',
+            'title': 'Mis menús',
+            'link': 'menus',
             'access': 'global.verified'
-        }/*,
+        },
         {
-            'title': 'Articles',
-            'link': 'articles'
-        }, {
-            'title': 'Create New Article',
-            'link': 'articles/create'
-        }*/
+            'title': 'Crear nuevo Menú',
+            'link': 'menus/crear',
+            'access': 'global.verified'
+        }
     ];
 
     $scope.isCollapsed = false;

@@ -21,11 +21,11 @@ window.app.config(['$routeProvider',
         {
             templateUrl: 'views/menus/list.html'
         })
-        .when('/menus/create',
+        .when('/menus/crear',
         {
             templateUrl: 'views/menus/create.html'
         })
-        .when('/menus/:menuId/edit',
+        .when('/menus/:menuId/editar',
         {
             templateUrl: 'views/menus/edit.html'
         })

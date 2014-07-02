@@ -1,0 +1,88 @@
+<section data-ng-controller="MenusController" data-ng-init="getPlaces(); findOne()">
+    <h1>Menú:</h1>
+    <section>
+        <fieldset>
+            <legend>Menú</legend>
+
+            <label for="menu" class="col-sm-2 control-label">Menú:</label>
+            <div class="col-sm-10">
+                <div class="panel panel-default">
+                    <div class="panel-heading" ng-repeat-start="section in menu.sections">
+                        <h3 class="panel-title">
+                            {{section.name}}
+                        </h3>
+                    </div>
+
+                    <div class="panel-body" ng-repeat-end>
+                        <ul class="list-group">
+                            <section ng-show="section.foods.length" ng-cloak>
+                                <li class="list-group-item" ng-repeat="food in section.foods">
+                                    {{food}}
+                                </li>
+                            </section>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <label for="price" class="col-sm-2 control-label">Precio:</label>
+            <div class="col-sm-10">
+                <p>{{ menu.price }} €</p>
+            </div>
+        </div>
+
+            <label for="fromHours" class="col-sm-2 control-label">Horario:</label>
+            <div class="col-sm-10">
+                <p> desde las {{menu.available[0].hours[0].from | date:'HH:mm'}} hasta las {{ menu.available[0].hours[0].to | date:'HH:mm'}}</p>
+            </div>
+
+            <label for="days" class="col-sm-2 control-label">Días:</label>
+            <div class="col-sm-10">
+                <label ng-repeat="day in days" class="checkbox-inline">
+                    <input name="days" type="checkbox" checklist-model="menu.available[0].days" checklist-value="day.id" ng-required="menu.available[0].days.length == 0"> {{day.text}}
+                </label>
+            </div>
+        </fieldset>
+        </section>
+        <br/>
+        <section>
+        <fieldset>
+            <legend>Localización</legend>
+                <label for="name" class="col-sm-2 control-label">Nombre:</label>
+                <div class="col-sm-10">
+                    <p>{{ place.name }}</p>
+                </div>
+
+                <label for="description" class="col-sm-2 control-label">Descripción:</label>
+                <div class="col-sm-10">
+                    <p>{{ place.description }}</p>
+                </div>
+
+                <label for="phone" class="col-sm-2 control-label">Teléfono:</label>
+                <div class="col-sm-10">
+                    <p>{{ place.telephone }}</p>
+                </div>
+
+                <label for="category" class="col-sm-2 control-label">Categoría:</label>
+                <div class="col-sm-10">
+                    <p ng-show="place.category == 'Private'">Particular</p>
+                    <p ng-show="place.category == 'Professional'">Empresa</p>
+                </div>
+
+                <label for="address" class="col-sm-2 control-label">Dirección:</label>
+                <div class="col-sm-10">
+                    <p>{{ place.address.str }}</p>
+                </div>
+
+                <div class="col-sm-offset-2 col-sm-10">
+                    <gmap class="col-sm-12" style="min-height:150px" geocode-input="address"></gmap>
+                </div>
+                <br/>
+                <label for="currentPhoto" class="col-sm-2 control-label">Foto:</label>
+                <div class="col-sm-10">
+                    <img style="width: 100%" id="currentPhoto" alt="Foto actual" ng-src={{currentImage}} />
+
+            </div>
+        </fieldset>
+    </section>
+</section>
