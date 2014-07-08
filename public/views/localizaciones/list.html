@@ -2,15 +2,13 @@
     <h1>Mis localizaciones</h1>
     <ul>
         <li data-ng-repeat="place in places">
-            <h3>
-                {{ place.name }}
-                <a data-ng-href="#!/localizaciones/{{place._id}}/editar">
-                    <span class="glyphicon glyphicon-edit"> Editar</span>
-                </a>
-                <a ng-click="modalRemove(place.name, place._id)">
-                    <span class="glyphicon glyphicon-trash"> Borrar</span>
-                </a>
-            </h3>
+            <h3 style="display:inline-block">{{ place.name }} </h3>
+            <a data-ng-href="#!/localizaciones/{{place._id}}/editar">
+                <span class="glyphicon glyphicon-edit"> Editar</span>
+            </a>
+            <a ng-click="modalRemove(place.name, place._id)">
+                <span class="glyphicon glyphicon-trash"> Borrar</span>
+            </a>
         </li>
     </ul>
     <div class="text-right">

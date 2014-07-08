@@ -84,7 +84,6 @@ window.angular.module('telemenu.places')
                 Places.findOne(
                     $routeParams.placeId
                 ).success(function (data) {
-                    console.log(data);
                     $scope.place = data;
                     $scope.currentImage = srcImage(data.image.original.path);
                     $scope.codeAddress(data.address.str);

@@ -210,6 +210,44 @@ window.angular.module('telemenu.menus')
                 });
             };
 
+            $scope.destroy = function (menu) {
+                menu.$remove();
+                for (var i in $scope.menus) {
+                    if ($scope.menus[i] === menu) {
+                        $scope.menus.splice(i, 1);
+                    }
+                }
+            };
+
+            $scope.modalRemoveMenu = function (target, menu) {
+                var modalInstance = $modal.open({
+                    templateUrl: 'views/bootstrap/remove-modal.html',
+                    controller: function ($scope, $modalInstance, target) {
+
+                        $scope.target = target;
+
+                        $scope.ok = function () {
+                            $modalInstance.close(true);
+                        };
+
+                        $scope.cancel = function () {
+                            $modalInstance.dismiss('cancel');
+                        };
+                    },
+                    resolve: {
+                        target: function () {
+                            return target;
+                        }
+                    }
+                });
+
+                modalInstance.result.then(function () {
+                    $scope.destroy(menu);
+                }, function () {
+                    $log.info('Modal dismissed at: ' + new Date());
+                });
+            };
+
             $scope.modalRemoveSection = function (target, section) {
 
                 var modalInstance = $modal.open({
