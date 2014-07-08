@@ -26,7 +26,10 @@ window.angular.module('telemenu.places')
 
             $scope.initPlace = function () {
                 $scope.place = {
-                    address: {},
+                    address: {
+                        lat: 0,
+                        lng: 0
+                    },
                     reservations_constrains: {
                         capacity: 1,
                         minutes_per_customer: 60
