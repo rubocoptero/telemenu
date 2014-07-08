@@ -3,6 +3,11 @@ angular.module('telemenu.system').controller('HeaderController', ['$scope', 'Glo
 
     $scope.menu = [
         {
+            'title': 'Buscar menús',
+            'link': 'menus/buscar',
+            'access': true
+        },
+        {
             'title': 'Mis menús',
             'link': 'menus',
             'access': 'global.verified'

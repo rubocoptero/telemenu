@@ -23,3 +23,7 @@ footer {
 footer p {
     padding:5px 0 12px 10px
 }
+/* Hack for responsive tables in Firefox */
+@-moz-document url-prefix() {
+  fieldset { display: table-cell; }
+}

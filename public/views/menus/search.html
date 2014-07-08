@@ -1,0 +1,48 @@
+<section data-ng-controller="MenusController" data-ng-init="find()">
+    <h1>Búsqueda de menús</h1>
+    <div class="container-fluid">
+        <div class="row panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Filtros</h3>
+            </div>
+            <div class="panel-body">
+                <div class="input-group">
+                  <span class="input-group-addon">Menos de</span>
+                  <input type="text" ng-model="maxPrice" class="form-control">
+                  <span class="input-group-addon">€</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="list-group row">
+            <div class="list-group-item row" data-ng-repeat="menu in menus | filter:menuFilter">
+                    <div data-ng-href="#!/menus/{{menu._id}}" class="table-responsive col-md-10">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th data-ng-repeat="section in menu.sections">{{section.name}}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td data-ng-repeat="section in menu.sections">
+                                        <ul>
+                                            <li data-ng-repeat="food in section.foods">
+                                                {{ food }}
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-2">
+                        <h2>{{ menu.price }} €</h2>
+                        <a data-ng-href="#!/menus/{{menu._id}}">
+                            <span class="glyphicon glyphicon-eye-open"> Ver</span>
+                        </a>
+                    </div>
+            </div>
+        </div>
+    </div>
+</section>

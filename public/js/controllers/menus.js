@@ -30,8 +30,23 @@ window.angular.module('telemenu.menus')
                 food: true
             };
 
-            var srcImage = function (path) {
+            var setMaxPrice = function (menus) {
+                $scope.maxPrice = Number.MIN_VALUE;
+                for (var i = 0; i < menus.length; i++) {
+                    $scope.maxPrice = Math.max(menus[i].price, $scope.maxPrice);
+                }
+            };
+
+            $scope.srcImage = function (path) {
                 return path.slice(path.indexOf('/img/'));
+            };
+
+            $scope.menuFilter = function (menu) {
+                if (menu.price > $scope.maxPrice) {
+                    return false;
+                }
+
+                return true;
             };
 
             $scope.initMenu = function () {
@@ -160,6 +175,13 @@ window.angular.module('telemenu.menus')
                 });
             };
 
+            $scope.find = function () {
+                Menus.query({}, function (menus) {
+                    $scope.menus = menus;
+                    setMaxPrice(menus);
+                });
+            };
+
             $scope.update = function(isValid) {
                 if ($scope.isMenuValid() && isValid) {
                     var menu = $scope.menu;
@@ -183,7 +205,7 @@ window.angular.module('telemenu.menus')
                             menu.available[0].hours[0].to);
                     $scope.place = menu.place;
                     $scope.menu.place = menu.place._id;
-                    $scope.currentImage = srcImage($scope.place.image.original.path);
+                    $scope.currentImage = $scope.srcImage($scope.place.image.original.path);
                     $scope.codeAddress($scope.place.address.str);
                 });
             };
