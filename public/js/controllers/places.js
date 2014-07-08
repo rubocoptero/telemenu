@@ -46,7 +46,7 @@ window.angular.module('telemenu.places')
             $scope.create = function() {
                 $scope.submitted = true;
                 if ($scope.placeForm.$valid) {
-                    setLatLng();
+                    //setLatLng();
                     Places.create(
                         $scope.place,
                         $scope.image
@@ -70,7 +70,7 @@ window.angular.module('telemenu.places')
 
             $scope.update = function() {
                 $scope.submitted = true;
-                setLatLng();
+                //setLatLng();
                 Places.update(
                     $routeParams.placeId,
                     $scope.place,
