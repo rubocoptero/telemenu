@@ -44,7 +44,7 @@ verificationTokenSchema.statics.createFor = function(user, cb) {
         mailer.sendVerificationLink(user.email, savedToken.link,
             function(err) {
                 if (err) return cb(err);
-                console.log('Verification link sent to ' + user.email + ' successfully');
+                //console.log('Verification link sent to ' + user.email + ' successfully');
                 cb(err, savedToken);
             });
     });

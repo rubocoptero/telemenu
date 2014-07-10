@@ -10,6 +10,7 @@ window.angular.module('telemenu.places')
         function ($scope, $routeParams, $location, Global, Places, $modal, $log) {
             $scope.global = Global;
             $scope.image = null;
+            $scope.uploading = false;
 
             var srcImage = function (path) {
                 return path.slice(path.indexOf('/img/'));
@@ -22,6 +23,10 @@ window.angular.module('telemenu.places')
                 } else {
                     console.log('Error: marker is undefined');
                 }
+            };
+
+            var isValid = function () {
+                return $scope.placeForm.$valid && $scope.image;
             };
 
             $scope.initPlace = function () {
@@ -45,8 +50,9 @@ window.angular.module('telemenu.places')
 
             $scope.create = function() {
                 $scope.submitted = true;
-                if ($scope.placeForm.$valid) {
+                if (isValid()) {
                     //setLatLng();
+                    $scope.uploading = true;
                     Places.create(
                         $scope.place,
                         $scope.image
@@ -55,8 +61,10 @@ window.angular.module('telemenu.places')
                     }).error(function (data) {
                         console.log('Error:');
                         console.log(data);
+                        $scope.uploading = false;
                     });
                 }
+                $scope.uploading = false;
             };
 
             $scope.mine = function() {
@@ -70,17 +78,22 @@ window.angular.module('telemenu.places')
 
             $scope.update = function() {
                 $scope.submitted = true;
-                //setLatLng();
-                Places.update(
-                    $routeParams.placeId,
-                    $scope.place,
-                    $scope.image
-                ).success(function (data) {
-                    $location.path('localizaciones');
-                }).error(function (data) {
-                    console.log('Error:');
-                    console.log(data);
-                });
+                if (isValid()) {
+                    //setLatLng();
+                    $scope.uploading = true;
+                    Places.update(
+                        $routeParams.placeId,
+                        $scope.place,
+                        $scope.image
+                    ).success(function (data) {
+                        $location.path('localizaciones');
+                    }).error(function (data) {
+                        $scope.uploading = false;
+                        console.log('Error:');
+                        console.log(data);
+                    });
+                }
+                $scope.uploading = false;
             };
 
             $scope.findOne = function () {

@@ -20,12 +20,10 @@ var getValidationErrorMessage = function (err) {
 
 exports.forMongoose = function(err) {
     var message;
-    console.log(err);
     if (err.name === 'ValidationError') {
         message = getValidationErrorMessage(err);
     } else if (err.name === 'MongoError') {
         message = getDuplicationErrorMessage(err);
     }
-    console.log('Message: ' + message);
     return message;
 };

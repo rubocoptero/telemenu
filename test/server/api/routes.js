@@ -61,29 +61,6 @@ global.appContainer.resolve(function (VerificationTokenStore, UserStore, dbTestU
                     });
                 });
             });
-
-        //     it('GET /verificacion/reenviar should resend a new token to the user mail address', function(done) {
-        //         var sendVerificationSpy = sinon.spy(mailer, 'sendVerificationLink');
-        //         UserStore.create(userData, function(err, user) {
-        //             should.not.exist(err);
-        //             passportStub.install(app);
-        //             passportStub.login('user');
-        //             request(app)
-        //                 .get('/verificacion/reenviar')
-        //                 .expect(200)
-        //                 .end(function(err, res) {
-        //                     console.log(err);
-        //                     console.log(res);
-        //                     sendVerificationSpy.should.have.been.calledOnce;
-        //                     sendVerificationSpy.restore();
-        //                     VerificationTokenStore.find({}, function(err,tokens) {
-        //                             tokens.should.have.length(1);
-        //                             passportStub.uninstall(app);
-        //                             done();
-        //                         });
-        //                 });
-        //         });
-        //     });
         });
     });
 });
