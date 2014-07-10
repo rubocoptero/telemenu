@@ -32,7 +32,7 @@ window.angular.module('telemenu.places')
             $scope.getAddress = function ($event) {
                 $scope.codeAddress();
                 $event.preventDefault();
-            }
+            };
 
             $scope.initPlace = function () {
                 $scope.place = {
@@ -69,7 +69,6 @@ window.angular.module('telemenu.places')
                         $scope.uploading = false;
                     });
                 }
-                $scope.uploading = false;
             };
 
             $scope.mine = function() {
@@ -83,7 +82,7 @@ window.angular.module('telemenu.places')
 
             $scope.update = function() {
                 $scope.submitted = true;
-                if (isValid()) {
+                if ($scope.placeForm.$valid) {
                     //setLatLng();
                     $scope.uploading = true;
                     Places.update(
@@ -98,7 +97,6 @@ window.angular.module('telemenu.places')
                         console.log(data);
                     });
                 }
-                $scope.uploading = false;
             };
 
             $scope.findOne = function () {
