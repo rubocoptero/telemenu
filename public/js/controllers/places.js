@@ -29,6 +29,11 @@ window.angular.module('telemenu.places')
                 return $scope.placeForm.$valid && $scope.image;
             };
 
+            $scope.getAddress = function ($event) {
+                $scope.codeAddress();
+                $event.preventDefault();
+            }
+
             $scope.initPlace = function () {
                 $scope.place = {
                     address: {
